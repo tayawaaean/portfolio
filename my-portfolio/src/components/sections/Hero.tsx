@@ -6,6 +6,9 @@ import { Link } from "react-scroll";
 import { useCallback, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
+// Import your background image from assets folder
+import bgHero from "../../assets/bg.jpg";
+
 export default function Hero() {
   const particlesInit = useCallback(async (engine: any) => {
     await loadFull(engine);
@@ -36,7 +39,7 @@ export default function Hero() {
             rgba(13,17,23,0.8) 0%, 
             rgba(22,27,34,0.8) 100%
           ), 
-          url('/bg-hero.jpg')
+          url(${bgHero})
         `,
         backgroundSize: "cover",
         backgroundPosition: "center",
@@ -49,7 +52,7 @@ export default function Hero() {
         id="tsparticles"
         init={particlesInit}
         options={{
-          background: { color: "transparent" }, // transparent so bg image shows through
+          background: { color: "transparent" },
           fpsLimit: 60,
           interactivity: {
             events: { onHover: { enable: true, mode: "repulse" }, resize: true },
