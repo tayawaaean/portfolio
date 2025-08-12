@@ -1,18 +1,75 @@
 <!doctype html>
 <html lang="en">
-
-<head>
-  <meta charset="UTF-8" />
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Roboto+Mono&display=swap"
-    rel="stylesheet" />
-  <title>Aean Portfolio</title>
-  <script type="module" crossorigin src="/portfolio/assets/index-CS2PZg7E.js"></script>
-</head>
-
-<body>
-  <div id="root"></div>
-</body>
-
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/portfolio/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#00e5ff" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Aean Portfolio" />
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/portfolio/manifest.json" />
+    
+    <!-- Apple Touch Icons -->
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon-152x152.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-180x180.png" />
+    <link rel="apple-touch-icon" sizes="167x167" href="/apple-touch-icon-167x167.png" />
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    
+    <!-- Preconnect to external domains -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto+Mono:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    
+    <title>Aean Gabrielle Tayawa - Portfolio</title>
+    <meta name="description" content="Full Stack Developer, Software Engineer, and IoT Engineer specializing in renewable energy, GIS platforms, and agricultural automation." />
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Aean Gabrielle Tayawa - Portfolio" />
+    <meta property="og:description" content="Full Stack Developer, Software Engineer, and IoT Engineer specializing in renewable energy, GIS platforms, and agricultural automation." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://your-domain.com" />
+    <meta property="og:image" content="/og-image.png" />
+    
+    <!-- Twitter Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Aean Gabrielle Tayawa - Portfolio" />
+    <meta name="twitter:description" content="Full Stack Developer, Software Engineer, and IoT Engineer specializing in renewable energy, GIS platforms, and agricultural automation." />
+    <meta name="twitter:image" content="/og-image.png" />
+    
+    <!-- Additional PWA Meta Tags -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="application-name" content="Aean Portfolio" />
+    <meta name="msapplication-TileColor" content="#00e5ff" />
+    <meta name="msapplication-config" content="/browserconfig.xml" />
+    <script type="module" crossorigin src="/portfolio/assets/index-C-mMemf6.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    
+    <!-- PWA Service Worker Registration -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js')
+            .then((registration) => {
+              console.log('SW registered: ', registration);
+            })
+            .catch((registrationError) => {
+              console.log('SW registration failed: ', registrationError);
+            });
+        });
+      }
+    </script>
+  </body>
 </html>

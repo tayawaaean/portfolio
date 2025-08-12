@@ -1,0 +1,84 @@
+{
+  "name": "Aean Gabrielle Tayawa - Portfolio",
+  "short_name": "Aean Portfolio",
+  "description": "Full Stack Developer, Software Engineer, and IoT Engineer Portfolio",
+  "start_url": "/portfolio/",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#00e5ff",
+  "orientation": "portrait-primary",
+  "scope": "/portfolio/",
+  "lang": "en",
+  "categories": ["business", "productivity", "utilities"],
+  "icons": [
+    {
+      "src": "/portfolio/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/portfolio/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/portfolio/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "About",
+      "short_name": "About",
+      "description": "Learn more about Aean",
+      "url": "/portfolio/#about",
+      "icons": [
+        {
+          "src": "/portfolio/icon-192x192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Projects",
+      "short_name": "Projects",
+      "description": "View portfolio projects",
+      "url": "/portfolio/#projects",
+      "icons": [
+        {
+          "src": "/portfolio/icon-192x192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Contact",
+      "short_name": "Contact",
+      "description": "Get in touch",
+      "url": "/portfolio/#contact",
+      "icons": [
+        {
+          "src": "/portfolio/icon-192x192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/portfolio/screenshot-wide.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide"
+    },
+    {
+      "src": "/portfolio/screenshot-narrow.png",
+      "sizes": "750x1334",
+      "type": "image/png",
+      "form_factor": "narrow"
+    }
+  ]
+}
