@@ -1,4 +1,4 @@
-import { FaReact, FaNodeJs, FaDocker, FaPython } from "react-icons/fa";
+import { FaReact, FaNodeJs, FaDocker, FaPython, FaMap } from "react-icons/fa";
 import {
   SiTypescript,
   SiMongodb,
@@ -19,6 +19,10 @@ import {
   SiZoom,
   SiPostman,
   SiLinux,
+  SiSupabase,
+  SiPostgresql,
+  SiSlack,
+  SiTwilio,
 } from "react-icons/si";
 
 export interface Skill {
@@ -45,8 +49,9 @@ export const skills = {
   databases: [
     { name: "MongoDB", icon: SiMongodb, color: "#4db33d" },
     { name: "MySQL", icon: SiMysql, color: "#00618a" },
+    { name: "PostgreSQL", icon: SiPostgresql, color: "#336791" },
+    { name: "Supabase", icon: SiSupabase, color: "#3ecf8e" },
     { name: "Firebase Realtime DB", icon: SiFirebase, color: "#ffca28" },
-    { name: "Microsoft SQL Server", icon: SiMongodb, color: "#b50707" }, // No direct icon, reused MongoDB with custom color
   ],
   iot: [
     { name: "Arduino", icon: SiArduino, color: "#00979d" },
@@ -68,5 +73,10 @@ export const skills = {
     { name: "Trello", icon: SiTrello, color: "#0079bf" },
     { name: "Notion", icon: SiNotion, color: "#000000" },
     { name: "Zoom", icon: SiZoom, color: "#2d8cff" },
+    { name: "Slack", icon: SiSlack, color: "#4a154b" },
+  ],
+  automation: [
+    { name: "n8n", icon: SiGit, color: "#ff6b6b" }, // No dedicated icon, reused Git icon with custom color
+    { name: "Twilio", icon: SiTwilio, color: "#f22f46" },
   ],
 };

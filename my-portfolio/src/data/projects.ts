@@ -1,4 +1,3 @@
-// src/data/projects.ts
 import { loadProjectImages } from "../utils/loadProjectImages";
 
 export interface Project {
@@ -15,16 +14,26 @@ export const projects: Project[] = [
     title: "ARECGIS Platform",
     date: "2025",
     description:
-      "A GIS-based renewable energy mapping platform built with React for the web and React Native for mobile, mapping over 1,000 renewable energy systems across the Philippines.",
+      "A national renewable energy GIS platform serving as the official inventory of Non-Commercial and Commercial Renewable Energy Systems — Solar, Wind, Hydropower, and Biomass — with over 400 MW of total capacity recorded. Built with Leaflet.js, OpenStreetMap, and geosphere for geodesic distance calculations and duplicate detection. Recognized by the Department of Energy (DOE) and used by State Universities and Colleges (SUCs) across the Philippines for energy system inventory management. Features React web and React Native mobile apps, Node.js + MongoDB backend, and compatibility with ArcGIS and QGIS workflows. Planned future update: solar installer user accounts for installation tracking and after-sales service performance.",
     images: loadProjectImages("arecgis"),
-    tech: ["React", "React Native", "Node.js", "MongoDB", "Express"],
+    tech: [
+      "Leaflet.js",
+      "OpenStreetMap",
+      "geosphere",
+      "React",
+      "React Native",
+      "Node.js",
+      "MongoDB",
+      "Express",
+      "GIS Mapping"
+    ],
     liveLink: "https://arec.mmsu.edu.ph",
   },
   {
     title: "Solar Pump Monitoring Application (SPMA)",
     date: "2025",
     description:
-      "A GIS-enabled MERN stack web application for real-time monitoring of solar-powered water pumps using MQTT WebSockets. It visualizes pump locations on an interactive map, tracking voltage, current, power output, and water flow via a custom-fabricated solar pump controller. The system compares operational savings against diesel and AC-powered pumps using the Gasoline Price API, integrates the PVWatts API for solar energy forecasting, and the Weather API for weather-based performance insights. Designed for agricultural use, it supports multi-site monitoring, remote diagnostics, and cost-benefit analysis — empowering farmers to optimize water management sustainably.",
+      "A GIS-enabled MERN stack web app for real-time monitoring of solar-powered water pumps using MQTT WebSockets. Maps pump locations on an interactive Leaflet map, tracking voltage, current, power output, and water flow. Integrates PVWatts API for solar energy forecasts, Gasoline Price API for cost savings comparisons, and Weather API for weather-based performance insights. Designed for agriculture, supports multi-site monitoring, remote diagnostics, and cost-benefit analysis.",
     images: loadProjectImages("solarpump"),
     tech: [
       "MongoDB",
@@ -35,14 +44,14 @@ export const projects: Project[] = [
       "PVWatts API",
       "Gasoline Price API",
       "Weather API",
-      "GIS Mapping",
+      "GIS Mapping"
     ],
   },
   {
     title: "AREC SRVA (Solar PV Beneficiary Survey & Research App)",
     date: "2025",
     description:
-      "A dual-platform system combining a React Native mobile app and a React web dashboard for surveying beneficiaries of DOE-donated solar systems from 2010–2014. The mobile app enables offline-first survey collection, storing responses locally before uploading them when connectivity is available. It captures user experiences, recommendations, and feedback for research purposes. The web dashboard provides real-time monitoring of collected data, supports Excel uploads, and includes interactive charts for easier analysis and visualization. Built with Firebase for storage and synchronization, the system streamlines data gathering and reporting for academic research.",
+      "A dual-platform system combining a React Native mobile app and a React web dashboard for surveying beneficiaries of DOE-donated solar systems from 2010–2014. Mobile app enables offline-first survey collection; web dashboard offers real-time monitoring, Excel uploads, and interactive charting. Built with Firebase for storage/sync, streamlining academic research data gathering and visualization.",
     images: loadProjectImages("srva"),
     tech: [
       "React Native",
@@ -50,14 +59,14 @@ export const projects: Project[] = [
       "Firebase",
       "Offline Storage",
       "Data Visualization",
-      "Excel Import",
+      "Excel Import"
     ],
   },
   {
     title: "Automated Lettuce Hydroponics System",
     date: "2024",
     description:
-      "A React + Python Flask + MongoDB-based IoT system for fully automated lettuce hydroponics farming. It performs real-time data logging and monitoring of water quality (pH, TDS, temperature, water level), flow rate, light intensity, and ambient temperature. The system controls AC units and irrigation pumps, provides alarms for abnormal readings, and enables manual overrides via a web-based dashboard with live monitoring. Designed to reduce manual labor and improve crop consistency, it streamlines farm operations through continuous automation and remote access.",
+      "A React + Python Flask + MongoDB IoT system for automated lettuce hydroponics farming. Monitors pH, TDS, temperature, water level, flow rate, light intensity, and ambient conditions in real-time. Controls irrigation pumps and AC units, with alarm notifications and manual overrides via web dashboard.",
     images: loadProjectImages("hydroponics"),
     tech: [
       "React",
@@ -66,25 +75,31 @@ export const projects: Project[] = [
       "MQTT",
       "WebSockets",
       "IoT Sensors",
-      "Real-Time Dashboard",
+      "Real-Time Dashboard"
     ],
   },
   {
     title: "Garlic Greenhouse Automation",
     date: "2024",
     description:
-      "A smart greenhouse system for garlic farming, featuring real-time monitoring and automated control. Built with React for the interface and Python Flask for backend APIs, it integrates MongoDB for data storage. The system controls lights, IR LEDs, and temperature via HTTP requests, receives sensor data (temperature, humidity, lux) over MQTT, automates actuators based on conditions, and includes a live video feed for remote monitoring — reducing manual labor and improving yield consistency.",
+      "A smart greenhouse for garlic farming integrating React UI, Python Flask backend, and MongoDB. Controls lights, IR LEDs, and temperature via HTTP requests; collects sensor data (temperature, humidity, lux) over MQTT; automates actuators based on environmental conditions. Includes live video monitoring for remote management.",
     images: loadProjectImages("garlic"),
-    tech: ["React", "Python Flask", "MongoDB", "MQTT", "HTTP Control", "Video Streaming"],
+    tech: [
+      "React",
+      "Python Flask",
+      "MongoDB",
+      "MQTT",
+      "HTTP Control",
+      "Video Streaming"
+    ],
   },
   {
     title: "Internal Portal & Company Website – Tayawa Tolentino CPAs and Company",
     date: "2023",
     description:
-      "Developed a full-featured internal portal using PHP, JavaScript, and MySQL with six modules for document tracking, reporting, and task management. Improved operational efficiency by 40% through automation of manual processes. Managed deployment on Hostinger, configuring DNS, FTP, and MySQL for secure, 100% uptime access during the internship. Designed and launched a responsive WordPress company website, increasing client inquiries and online visibility by 25% in two months. Worked closely with administrative staff to customize features aligned with accounting workflows.",
+      "Developed an internal portal with PHP, JavaScript, and MySQL for document tracking, reporting, and task management. Improved efficiency by 40% through process automation. Also designed and deployed a responsive WordPress company website, boosting client inquiries by 25% in two months.",
     images: loadProjectImages("ttcpa"),
     tech: ["PHP", "JavaScript", "MySQL", "WordPress", "Hostinger Deployment"],
     liveLink: "tayawacpa.net",
   },
 ];
-
