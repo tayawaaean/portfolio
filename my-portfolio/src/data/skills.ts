@@ -1,4 +1,4 @@
-import { FaReact, FaNodeJs, FaDocker, FaPython, FaMap } from "react-icons/fa";
+import { FaReact, FaNodeJs, FaDocker, FaPython } from "react-icons/fa";
 import {
   SiTypescript,
   SiMongodb,
