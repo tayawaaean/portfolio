@@ -111,7 +111,9 @@ export default function Experience() {
                     backdropFilter: "blur(20px)",
                     border: "1px solid rgba(0, 229, 255, 0.1)",
                     borderRadius: 3,
+                    width: "100%",
                     maxWidth: { xs: "90vw", md: "700px" },
+                    mx: "auto",
                     position: "relative",
                     overflow: "hidden",
                     "&::before": {
@@ -141,7 +143,10 @@ export default function Experience() {
                         backgroundClip: "text",
                         WebkitBackgroundClip: "text",
                         WebkitTextFillColor: "transparent",
-                        mb: 1
+                        mb: 1,
+                        wordBreak: "break-word",
+                        overflowWrap: "anywhere",
+                        hyphens: "auto"
                       }}
                     >
                       {exp.title}
@@ -152,7 +157,10 @@ export default function Experience() {
                       sx={{ 
                         mb: 2,
                         fontSize: "0.95rem",
-                        fontWeight: 500
+                        fontWeight: 500,
+                        wordBreak: "break-word",
+                        overflowWrap: "anywhere",
+                        hyphens: "auto"
                       }}
                     >
                       {exp.company} — {exp.date}
@@ -387,6 +395,9 @@ export default function Experience() {
                                 fontWeight: isPrimary ? 500 : 400,
                                 position: "relative",
                                 pl: 2.5,
+                                wordBreak: "break-word",
+                                overflowWrap: "anywhere",
+                                hyphens: "auto",
                                 "&::before": {
                                   content: '"▹"',
                                   color: "#00e5ff",

@@ -14,7 +14,7 @@ export const projects: Project[] = [
     title: "ARECGIS Platform",
     date: "2025",
     description:
-      "A national renewable energy GIS platform serving as the official inventory of Non-Commercial and Commercial Renewable Energy Systems — Solar, Wind, Hydropower, and Biomass — with over 400 MW of total capacity recorded. Built with Leaflet.js, OpenStreetMap, and geosphere for geodesic distance calculations and duplicate detection. Recognized by the Department of Energy (DOE) and used by State Universities and Colleges (SUCs) across the Philippines for energy system inventory management. Features React web and React Native mobile apps, Node.js + MongoDB backend, and compatibility with ArcGIS and QGIS workflows. Planned future update: solar installer user accounts for installation tracking and after-sales service performance.",
+      "A GIS-based renewable energy inventory system used by State Universities and Colleges (SUCs) across the Philippines and recognized by the Department of Energy (DOE) for non‑commercial renewable energy data. The platform has recorded 7.82 GW of capacity nationwide. Built with the MERN stack (MongoDB, Express, React, Node.js) and Leaflet.js with the OpenStreetMap API to map assets, identify powerlines, and render heatmaps for capacity density and coverage. Designed for scale and research workflows, with React web and React Native mobile clients, a Node.js + MongoDB backend, and interoperability with ArcGIS/QGIS.",
     images: loadProjectImages("arecgis"),
     tech: [
       "Leaflet.js",
