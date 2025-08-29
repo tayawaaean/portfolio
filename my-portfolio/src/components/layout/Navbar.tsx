@@ -14,13 +14,12 @@ import {
   useTheme,
   useMediaQuery,
   Avatar,
-  Tooltip,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import { GitHub, LinkedIn, GetApp } from "@mui/icons-material";
+import { GitHub, LinkedIn } from "@mui/icons-material";
 import { motion } from "framer-motion";
 import TouchGestures from "../common/TouchGestures";
-import { usePWA } from "../../hooks/usePWA";
+
 
 const navItems = [
   { label: "About", href: "#about" },
@@ -36,12 +35,9 @@ export default function Navbar() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [currentSection, setCurrentSection] = useState("home");
   
-  const { isInstallable, installApp, registerServiceWorker } = usePWA();
+
 
   useEffect(() => {
-    // Register service worker on mount
-    registerServiceWorker();
-    
     // Handle scroll to update current section
     const handleScroll = () => {
       const sections = navItems.map(item => item.href.substring(1));
@@ -61,18 +57,13 @@ export default function Navbar() {
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [registerServiceWorker]);
+  }, []);
 
   const toggleDrawer = (open: boolean) => () => {
     setDrawerOpen(open);
   };
 
-  const handleInstallClick = async () => {
-    const success = await installApp();
-    if (success) {
-      console.log('App installed successfully!');
-    }
-  };
+
 
 
 
@@ -157,23 +148,7 @@ export default function Navbar() {
           })}
         </List>
 
-        {/* PWA Install Button */}
-        {isInstallable && (
-          <Box sx={{ p: 2, borderTop: "1px solid rgba(0, 229, 255, 0.2)" }}>
-            <Button
-              fullWidth
-              variant="contained"
-              startIcon={<GetApp />}
-              onClick={handleInstallClick}
-              sx={{
-                background: "linear-gradient(45deg, #00e5ff, #20c997)",
-                mb: 2
-              }}
-            >
-              Install App
-            </Button>
-          </Box>
-        )}
+
 
         {/* Social Links in Mobile Menu */}
         <Box sx={{ p: 3, borderTop: "1px solid rgba(0, 229, 255, 0.2)" }}>
@@ -320,30 +295,7 @@ export default function Navbar() {
                 );
               })}
               
-              {/* PWA Install Button */}
-              {isInstallable && (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.5, delay: 0.6 }}
-                >
-                  <Tooltip title="Install App">
-                    <IconButton
-                      onClick={handleInstallClick}
-                      sx={{
-                        color: "#00e5ff",
-                        background: "rgba(0, 229, 255, 0.1)",
-                        "&:hover": { 
-                          background: "rgba(0, 229, 255, 0.2)",
-                          transform: "scale(1.1)"
-                        }
-                      }}
-                    >
-                      <GetApp />
-                    </IconButton>
-                  </Tooltip>
-                </motion.div>
-              )}
+
               
               {/* Social Links in Desktop */}
               <Box sx={{ ml: 2, display: "flex", gap: 1 }}>
