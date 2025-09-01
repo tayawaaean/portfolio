@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import {
   Box,
   Typography,
@@ -14,8 +14,13 @@ import {
   Button,
   Tabs,
   Tab,
+  TextField,
+  InputAdornment,
+  FormControl,
+  Select,
+  MenuItem,
 } from "@mui/material";
-import { ArrowBack, ArrowForward, Close } from "@mui/icons-material";
+import { ArrowBack, ArrowForward, Close, Search, Sort } from "@mui/icons-material";
 import {
   Timeline,
   TimelineItem,
@@ -58,6 +63,36 @@ const techColors: Record<string, string> = {
   "Data Visualization": "#009688",
   "Excel Import": "#1b5e20",
   "Hostinger Deployment": "#512da8",
+  Rust: "#ce422b",
+  TypeScript: "#3178c6",
+  Vercel: "#000000",
+  "Real-time Analytics": "#ff6b35",
+  "Solar Energy": "#ffd700",
+  "Next.js 14": "#000000",
+  "TailwindCSS": "#06b6d4",
+  "Framer Motion": "#ff0055",
+  "Recharts": "#2196f3",
+  "Lucide React": "#fbbf24",
+  "Radix UI": "#ffffff",
+  "App Router": "#000000",
+  Supabase: "#3ecf8e",
+  Stripe: "#6772e5",
+  "JWT Authentication": "#d63aff",
+  "React Hook Form": "#ec5990",
+  Zod: "#3056d3",
+  Heroicons: "#0ea5e9",
+  "Row Level Security": "#059669",
+  "Real-time Updates": "#f59e0b",
+  "E-commerce": "#7c3aed",
+  "Next.js 15": "#000000",
+  "React 19": "#61dafb",
+  "Material-UI": "#0081cb",
+  "Vite": "#646cff",
+  "EmailJS": "#f5a623",
+  "React Router DOM": "#ca4245",
+  "Emotion": "#d36ac2",
+  "ESLint": "#4b32c3",
+  "Professional Template": "#9c27b0",
 };
 
 export default function Projects() {
@@ -65,6 +100,8 @@ export default function Projects() {
   const [lightboxIndex, setLightboxIndex] = useState(0);
   const [lightboxImages, setLightboxImages] = useState<string[]>([]);
   const [selectedCategory, setSelectedCategory] = useState("all");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [sortBy, setSortBy] = useState("date");
 
   const theme = useTheme();
   const isSm = useMediaQuery(theme.breakpoints.down("sm"));
@@ -74,7 +111,7 @@ export default function Projects() {
   const categories = {
     all: "All Projects",
     government: "Government/Enterprise",
-    iot: "IoT & Agriculture", 
+    iot: "IoT & Agriculture",
     business: "Business Solutions"
   };
 
@@ -82,14 +119,42 @@ export default function Projects() {
   const categorizeProject = (project: any) => {
     const title = project.title.toLowerCase();
     if (title.includes("arecgis") || title.includes("srva")) return "government";
-    if (title.includes("solar") || title.includes("hydroponics") || title.includes("garlic")) return "iot";
+    if (title.includes("hydroponics") || title.includes("garlic") || title.includes("solar")) return "iot";
     if (title.includes("portal") || title.includes("company")) return "business";
     return "business";
   };
 
-  const filteredProjects = selectedCategory === "all" 
-    ? projects 
-    : projects.filter(project => categorizeProject(project) === selectedCategory);
+  // Enhanced filtering and sorting logic
+  const filteredProjects = useMemo(() => {
+    let filtered = selectedCategory === "all"
+      ? projects
+      : projects.filter(project => categorizeProject(project) === selectedCategory);
+
+    // Apply search filter
+    if (searchQuery.trim()) {
+      filtered = filtered.filter(project =>
+        project.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        project.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        project.tech.some(tech => tech.toLowerCase().includes(searchQuery.toLowerCase()))
+      );
+    }
+
+    // Apply sorting
+    filtered = [...filtered].sort((a, b) => {
+      switch (sortBy) {
+        case "date":
+          return parseInt(b.date) - parseInt(a.date);
+        case "title":
+          return a.title.localeCompare(b.title);
+        case "category":
+          return categorizeProject(a).localeCompare(categorizeProject(b));
+        default:
+          return 0;
+      }
+    });
+
+    return filtered;
+  }, [selectedCategory, searchQuery, sortBy]);
 
   // Featured project (ARECGIS)
   const featuredProject = projects[0];
@@ -328,6 +393,67 @@ export default function Projects() {
         </Box>
       </AnimatedSection>
 
+      {/* Search and Sort Controls */}
+      <AnimatedSection animation="fadeUp" delay={0.3}>
+        <Box sx={{ mb: 4 }}>
+          <Box sx={{
+            display: "flex",
+            flexDirection: { xs: "column", md: "row" },
+            gap: 2,
+            mb: 3
+          }}>
+            {/* Search Bar */}
+            <TextField
+              placeholder="Search projects, technologies..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              sx={{
+                flex: 1,
+                "& .MuiOutlinedInput-root": {
+                  backgroundColor: "rgba(255, 255, 255, 0.05)",
+                  "&:hover": {
+                    backgroundColor: "rgba(255, 255, 255, 0.08)"
+                  },
+                  "&.Mui-focused": {
+                    backgroundColor: "rgba(255, 255, 255, 0.08)"
+                  }
+                }
+              }}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Search sx={{ color: "text.secondary" }} />
+                  </InputAdornment>
+                ),
+              }}
+            />
+
+            {/* Sort Dropdown */}
+            <FormControl sx={{ minWidth: 150 }}>
+              <Select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                startAdornment={
+                  <InputAdornment position="start">
+                    <Sort sx={{ color: "text.secondary" }} />
+                  </InputAdornment>
+                }
+                sx={{
+                  backgroundColor: "rgba(255, 255, 255, 0.05)",
+                  "&:hover": {
+                    backgroundColor: "rgba(255, 255, 255, 0.08)"
+                  }
+                }}
+              >
+                <MenuItem value="date">Sort by Date</MenuItem>
+                <MenuItem value="title">Sort by Title</MenuItem>
+                <MenuItem value="category">Sort by Category</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
+        </Box>
+      </AnimatedSection>
+
       {/* Project Categories */}
       <AnimatedSection animation="fadeUp" delay={0.4}>
         <Box sx={{ mb: 4 }}>
@@ -356,6 +482,41 @@ export default function Projects() {
               <Tab key={key} label={label} value={key} />
             ))}
           </Tabs>
+        </Box>
+      </AnimatedSection>
+
+      {/* Results Counter */}
+      <AnimatedSection animation="fadeUp" delay={0.5}>
+        <Box sx={{ mb: 3 }}>
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            sx={{
+              textAlign: "center",
+              fontSize: { xs: "0.85rem", md: "0.9rem" }
+            }}
+          >
+            Showing {filteredProjects.length} of {projects.length} projects
+            {(searchQuery || selectedCategory !== "all") && (
+              <Button
+                size="small"
+                onClick={() => {
+                  setSearchQuery("");
+                  setSelectedCategory("all");
+                  setSortBy("date");
+                }}
+                sx={{
+                  ml: 2,
+                  textTransform: "none",
+                  fontSize: "0.8rem",
+                  minHeight: "auto",
+                  padding: "2px 8px"
+                }}
+              >
+                Clear filters
+              </Button>
+            )}
+          </Typography>
         </Box>
       </AnimatedSection>
 
@@ -440,11 +601,11 @@ export default function Projects() {
                 >
                   {/* Category Badge */}
                   <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 2, flexWrap: "wrap" }}>
-                    <Chip 
-                      label={categories[category as keyof typeof categories]} 
+                    <Chip
+                      label={categories[category as keyof typeof categories]}
                       size="small"
                       sx={{
-                        backgroundColor: 
+                        backgroundColor:
                           category === "government" ? "rgba(255, 152, 0, 0.2)" :
                           category === "iot" ? "rgba(76, 175, 80, 0.2)" :
                           "rgba(33, 150, 243, 0.2)",

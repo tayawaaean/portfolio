@@ -30,6 +30,67 @@ export const projects: Project[] = [
     liveLink: "https://arec.mmsu.edu.ph",
   },
   {
+    title: "Professional Virtual Assistant Portfolio Template",
+    date: "2024",
+    description:
+      "A modern, responsive portfolio website template built with React, TypeScript, and Material-UI, specifically designed for professional virtual assistants and business service providers. Features a clean, professional aesthetic with Material-UI components, fully responsive design optimized for all devices, high performance with Vite, smooth animations powered by Framer Motion, EmailJS-powered contact form with professional email templates, full TypeScript support, SEO optimization, accessibility features with ARIA labels, and a professional pastel pink and purple theme perfect for service providers.",
+    images: loadProjectImages("portfolio_va"),
+    tech: [
+      "React 19",
+      "TypeScript",
+      "Material-UI",
+      "Framer Motion",
+      "Vite",
+      "EmailJS",
+      "React Router DOM",
+      "Emotion",
+      "ESLint",
+      "Professional Template"
+    ],
+    liveLink: "https://kimberlymaereodique.vercel.app",
+  },
+  {
+    title: "Supplement Store - Inventory Management System",
+    date: "2024",
+    description:
+      "A production-ready inventory management system for supplement stores with real-time features, secure authentication, and a modern admin dashboard. Built with Next.js 15, TypeScript, and Supabase. Features comprehensive inventory management with real-time stock tracking, e-commerce functionality with shopping cart and checkout, user management with admin approval system, real-time chat support, analytics dashboard with sales metrics and insights, and secure JWT-based authentication with role-based access control. Includes responsive design, advanced search & filtering, Stripe payment integration, Row Level Security, and is optimized for performance with a Lighthouse score of 95+ across all metrics.",
+    images: loadProjectImages("supplement-ecommerce-store"),
+    tech: [
+      "Next.js 15",
+      "TypeScript",
+      "TailwindCSS",
+      "Supabase",
+      "Stripe",
+      "JWT Authentication",
+      "React Hook Form",
+      "Zod",
+      "Heroicons",
+      "Row Level Security",
+      "Real-time Updates",
+      "E-commerce"
+    ],
+    liveLink: "https://supplement-store-demo.vercel.app",
+  },
+  {
+    title: "SolarFarm Dashboard - Solar Energy Monitoring System",
+    date: "2024",
+    description:
+      "A modern, production-ready Next.js 14 dashboard template for solar energy monitoring systems. Built with TypeScript, TailwindCSS, and Framer Motion for a beautiful, responsive user experience. Features real-time energy monitoring, interactive charts using Recharts, device management, weather integration, battery status tracking, comprehensive analytics & reports, and a notifications system. Includes dark/light theme support, solar-inspired color palette, and is fully optimized for desktop, tablet, and mobile devices. Designed to be easily customizable and production-ready with a Lighthouse score of 95+ across all metrics.",
+    images: loadProjectImages("solar-dashboard"),
+    tech: [
+      "Next.js 14",
+      "TypeScript",
+      "TailwindCSS",
+      "Framer Motion",
+      "Recharts",
+      "Lucide React",
+      "Radix UI",
+      "App Router",
+      "Solar Energy"
+    ],
+    liveLink: "https://solar-energy-dashboard-rust.vercel.app/dashboard",
+  },
+  {
     title: "Solar Pump Monitoring Application (SPMA)",
     date: "2025",
     description:
