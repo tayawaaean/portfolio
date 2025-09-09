@@ -250,7 +250,7 @@ export default function EnhancedContact() {
                 Why Work With Me?
               </Typography>
               <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
-                <Chip label="10+ Years Experience" color="primary" variant="outlined" />
+                <Chip label="1+ Years Experience" color="primary" variant="outlined" />
                 <Chip label="100% Project Success" color="secondary" variant="outlined" />
                 <Chip label="24/7 Support" color="success" variant="outlined" />
                 <Chip label="Agile Development" color="warning" variant="outlined" />
