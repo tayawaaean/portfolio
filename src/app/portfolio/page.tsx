@@ -11,14 +11,14 @@ export default function PortfolioPage() {
   const ndaCount = projects.filter((p) => p.isNda).length;
 
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen overflow-x-hidden">
       <Navbar />
       <SocialIcons />
       <div className="pt-24 pb-20 px-8 md:px-16 max-w-7xl mx-auto">
         {/* Page header */}
         <div className="relative mb-14">
           {/* Subtle radial orb */}
-          <div className="absolute -top-20 left-1/4 w-[500px] h-[300px] bg-[radial-gradient(ellipse_at_center,rgba(99,102,241,0.07)_0%,transparent_70%)] pointer-events-none" />
+          <div className="absolute -top-20 left-1/4 w-full max-w-[500px] h-[300px] bg-[radial-gradient(ellipse_at_center,rgba(99,102,241,0.07)_0%,transparent_70%)] pointer-events-none" />
 
           <motion.h1
             initial={{ opacity: 0, y: 30 }}

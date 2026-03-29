@@ -4,7 +4,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X } from "lucide-react";
 
 const links = [
   { href: "/", label: "Home" },
@@ -20,7 +19,7 @@ export default function Navbar() {
   return (
     <>
       <nav
-        className="fixed top-0 z-50 w-full px-8 py-6"
+        className="fixed top-0 left-0 z-50 w-full px-8 py-6 bg-[#0a0a0a]/80 backdrop-blur-md"
       >
         {/* Desktop */}
         <div className="hidden md:flex items-center gap-8 justify-end">
@@ -50,10 +49,31 @@ export default function Navbar() {
         <div className="flex md:hidden justify-end">
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="text-white p-2"
             aria-label="Toggle menu"
+            style={{ width: 40, height: 40, display: "flex", alignItems: "center", justifyContent: "center" }}
           >
-            {mobileOpen ? <X size={24} /> : <Menu size={24} />}
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="white"
+              strokeWidth="2"
+              strokeLinecap="round"
+            >
+              {mobileOpen ? (
+                <>
+                  <line x1="4" y1="4" x2="20" y2="20" />
+                  <line x1="20" y1="4" x2="4" y2="20" />
+                </>
+              ) : (
+                <>
+                  <line x1="3" y1="6" x2="21" y2="6" />
+                  <line x1="3" y1="12" x2="21" y2="12" />
+                  <line x1="3" y1="18" x2="21" y2="18" />
+                </>
+              )}
+            </svg>
           </button>
         </div>
       </nav>
