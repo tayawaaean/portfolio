@@ -1,9 +1,9 @@
 "use client";
 
-import { useMemo } from "react";
+import { Fragment, useMemo, useRef } from "react";
 import Image from "next/image";
-import { motion } from "framer-motion";
-import { Shield, ExternalLink } from "lucide-react";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { Shield, ExternalLink, ArrowDown } from "lucide-react";
 import { Project } from "@/types";
 import { getCategoryColors } from "@/components/portfolio/categoryColors";
 
@@ -33,81 +33,83 @@ export default function DetailHero({
     [project.category]
   );
 
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end start"],
+  });
+
+  // Cinematic parallax: the backdrop scales up and drifts while the
+  // foreground copy rises and fades as you scroll past.
+  const bgScale = useTransform(scrollYProgress, [0, 1], [1, 1.25]);
+  const bgY = useTransform(scrollYProgress, [0, 1], ["0%", "12%"]);
+  const overlayOpacity = useTransform(scrollYProgress, [0, 1], [0.35, 0.85]);
+  const contentY = useTransform(scrollYProgress, [0, 1], [0, -80]);
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
+  const cueOpacity = useTransform(scrollYProgress, [0, 0.15], [1, 0]);
+
   const words = project.title.split(" ");
   const imageExists = AVAILABLE_IMAGES.has(project.image);
 
   return (
-    <section className="relative min-h-[60vh] md:min-h-[70vh] flex flex-col justify-end overflow-hidden">
-      {/* Background: real image or animated gradient mesh */}
-      {imageExists ? (
-        <>
-          <div className="absolute inset-0">
-            <Image
-              src={project.image}
-              alt={project.title}
-              fill
-              className="object-cover object-top"
-              loading="lazy"
-              sizes="100vw"
+    <section
+      ref={sectionRef}
+      className="relative h-screen min-h-[640px] flex flex-col justify-end overflow-hidden"
+    >
+      {/* Parallax backdrop */}
+      <motion.div
+        style={{ scale: bgScale, y: bgY }}
+        className="absolute inset-0 will-change-transform"
+      >
+        {imageExists ? (
+          <Image
+            src={project.image}
+            alt={project.title}
+            fill
+            priority
+            className="object-cover object-top"
+            sizes="100vw"
+          />
+        ) : (
+          <>
+            <motion.div
+              className="absolute inset-0"
+              animate={{ backgroundPosition: ["0% 0%", "100% 100%", "0% 0%"] }}
+              transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+              style={{
+                background: `
+                  radial-gradient(ellipse at 20% 50%, rgba(${colors.primary},0.22), transparent 50%),
+                  radial-gradient(ellipse at 80% 20%, rgba(${colors.secondary},0.15), transparent 50%),
+                  radial-gradient(ellipse at 50% 80%, rgba(${colors.accent},0.12), transparent 50%)
+                `,
+              }}
             />
-          </div>
-          {/* Dark overlay for text readability */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/70 to-[#0a0a0a]/30" />
-        </>
-      ) : (
-        <>
-          {/* Animated gradient mesh background */}
-          <motion.div
-            className="absolute inset-0"
-            animate={{
-              backgroundPosition: ["0% 0%", "100% 100%", "0% 0%"],
-            }}
-            transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-            style={{
-              background: `
-                radial-gradient(ellipse at 20% 50%, rgba(${colors.primary},0.18), transparent 50%),
-                radial-gradient(ellipse at 80% 20%, rgba(${colors.secondary},0.12), transparent 50%),
-                radial-gradient(ellipse at 50% 80%, rgba(${colors.accent},0.1), transparent 50%)
-              `,
-            }}
-          />
+            <div
+              className="absolute inset-0 opacity-[0.04]"
+              style={{
+                backgroundImage: `linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)`,
+                backgroundSize: "40px 40px",
+              }}
+            />
+          </>
+        )}
+      </motion.div>
 
-          {/* Noise texture overlay */}
-          <div className="absolute inset-0 opacity-[0.04]">
-            <svg width="100%" height="100%">
-              <filter id="detail-noise">
-                <feTurbulence
-                  type="fractalNoise"
-                  baseFrequency="0.65"
-                  numOctaves="3"
-                  stitchTiles="stitch"
-                />
-              </filter>
-              <rect width="100%" height="100%" filter="url(#detail-noise)" />
-            </svg>
-          </div>
+      {/* Scroll-reactive dark overlay */}
+      <motion.div
+        style={{ opacity: overlayOpacity }}
+        className="absolute inset-0 bg-[#0a0a0a]"
+      />
+      {/* Static bottom-to-top gradient so copy stays legible */}
+      <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/55 to-transparent" />
 
-          {/* Subtle grid pattern */}
-          <div
-            className="absolute inset-0 opacity-[0.03]"
-            style={{
-              backgroundImage: `
-                linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)
-              `,
-              backgroundSize: "40px 40px",
-            }}
-          />
-        </>
-      )}
-
-      {/* Floating metadata badges - top right */}
+      {/* Floating metadata — top right */}
       <div className="absolute top-28 right-8 md:right-16 z-10 flex flex-col items-end gap-3">
         <motion.span
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5, delay: 0.4 }}
-          className="bg-white/[0.06] backdrop-blur-sm border border-white/[0.1] rounded-full px-4 py-1.5 font-mono text-xs text-gray-400 tracking-wider"
+          className="bg-white/[0.06] backdrop-blur-sm border border-white/[0.1] rounded-full px-4 py-1.5 font-mono text-xs text-gray-300 tracking-wider"
         >
           {project.category}
         </motion.span>
@@ -130,28 +132,53 @@ export default function DetailHero({
           transition={{ duration: 0.5, delay: 0.6 }}
           className="font-mono text-xs text-gray-600 tracking-wider"
         >
-          {String(projectIndex + 1).padStart(2, "0")} / {String(totalProjects).padStart(2, "0")}
+          {String(projectIndex + 1).padStart(2, "0")} /{" "}
+          {String(totalProjects).padStart(2, "0")}
         </motion.span>
       </div>
 
-      {/* Main content */}
-      <div className="relative z-10 px-8 md:px-16 pb-12 md:pb-16 max-w-7xl mx-auto w-full">
+      {/* Foreground copy */}
+      <motion.div
+        style={{ y: contentY, opacity: contentOpacity }}
+        className="relative z-10 px-8 md:px-16 pb-16 md:pb-24 max-w-7xl mx-auto w-full"
+      >
+        {/* Eyebrow */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.15 }}
+          className="flex items-center gap-3 mb-5"
+        >
+          <span
+            className="h-[1px] w-12"
+            style={{ background: `rgba(${colors.primary},0.8)` }}
+          />
+          <span
+            className="font-mono text-[10px] tracking-[0.3em] uppercase"
+            style={{ color: `rgba(${colors.primary},0.9)` }}
+          >
+            Case Study
+          </span>
+        </motion.div>
+
         {/* Title with staggered word reveal */}
-        <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-[1.1]">
+        <h1 className="font-display text-5xl md:text-7xl lg:text-[5.5rem] font-bold mb-6 leading-[1.05]">
           {words.map((word, i) => (
-            <motion.span
-              key={i}
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{
-                duration: 0.6,
-                delay: 0.2 + i * 0.08,
-                ease: [0.25, 0.46, 0.45, 0.94] as const,
-              }}
-              className="inline-block mr-[0.3em]"
-            >
-              {word}
-            </motion.span>
+            <Fragment key={i}>
+              <motion.span
+                initial={{ opacity: 0, y: 40 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  duration: 0.8,
+                  delay: 0.25 + i * 0.08,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+                className="inline-block"
+              >
+                {word}
+              </motion.span>
+              {i < words.length - 1 ? " " : ""}
+            </Fragment>
           ))}
         </h1>
 
@@ -160,7 +187,7 @@ export default function DetailHero({
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.6 }}
-          className="text-gray-400 text-sm md:text-base max-w-2xl leading-relaxed mb-8"
+          className="text-gray-300 text-sm md:text-base max-w-2xl leading-relaxed mb-8"
         >
           {project.description}
         </motion.p>
@@ -169,7 +196,7 @@ export default function DetailHero({
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.8 }}
+          transition={{ duration: 0.6, delay: 0.75 }}
           className="flex gap-3"
         >
           {project.liveUrl && (
@@ -195,10 +222,23 @@ export default function DetailHero({
             </a>
           )}
         </motion.div>
-      </div>
+      </motion.div>
 
-      {/* Bottom gradient fade */}
-      <div className="absolute bottom-0 inset-x-0 h-24 bg-gradient-to-t from-[#0a0a0a] to-transparent pointer-events-none" />
+      {/* Scroll cue */}
+      <motion.div
+        style={{ opacity: cueOpacity }}
+        className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2"
+      >
+        <span className="font-mono text-[9px] tracking-[0.3em] uppercase text-gray-500">
+          Scroll
+        </span>
+        <motion.div
+          animate={{ y: [0, 6, 0] }}
+          transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <ArrowDown size={14} className="text-gray-500" />
+        </motion.div>
+      </motion.div>
     </section>
   );
 }

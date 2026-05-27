@@ -1,8 +1,16 @@
 "use client";
 
 import Image from "next/image";
-import { motion, useInView } from "framer-motion";
+import {
+  motion,
+  useInView,
+  useMotionValue,
+  useSpring,
+  useScroll,
+  useTransform,
+} from "framer-motion";
 import { useRef, useEffect, useState } from "react";
+import NumberFlow from "@number-flow/react";
 import { MapPin, Briefcase, GraduationCap } from "lucide-react";
 
 const stats = [
@@ -12,7 +20,7 @@ const stats = [
   { value: 6, suffix: "", label: "Industries Served" },
 ];
 
-function AnimatedCounter({
+function StatCounter({
   value,
   suffix,
   delay,
@@ -21,42 +29,114 @@ function AnimatedCounter({
   suffix: string;
   delay: number;
 }) {
-  const ref = useRef<HTMLSpanElement>(null);
+  const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true });
-  const [count, setCount] = useState(0);
+  const [display, setDisplay] = useState(0);
 
   useEffect(() => {
     if (!isInView) return;
-    const timeout = setTimeout(() => {
-      const duration = 1500;
-      const steps = 40;
-      const increment = value / steps;
-      let current = 0;
-      const interval = setInterval(() => {
-        current += increment;
-        if (current >= value) {
-          setCount(value);
-          clearInterval(interval);
-        } else {
-          setCount(Math.floor(current));
-        }
-      }, duration / steps);
-      return () => clearInterval(interval);
-    }, delay * 1000);
-    return () => clearTimeout(timeout);
+    const t = setTimeout(() => setDisplay(value), delay * 1000);
+    return () => clearTimeout(t);
   }, [isInView, value, delay]);
 
   return (
-    <span ref={ref}>
-      {count.toLocaleString()}
-      {suffix}
-    </span>
+    <div ref={ref} className="flex items-baseline justify-center">
+      <NumberFlow
+        value={display}
+        transformTiming={{ duration: 1100, easing: "ease-out" }}
+      />
+      <span>{suffix}</span>
+    </div>
   );
 }
 
-export default function AboutHero() {
+/** Profile photo with cursor-driven 3D tilt and floating decorative frames. */
+function TiltPhoto() {
+  const ref = useRef<HTMLDivElement>(null);
+  const rx = useSpring(useMotionValue(0), { stiffness: 150, damping: 18 });
+  const ry = useSpring(useMotionValue(0), { stiffness: 150, damping: 18 });
+
+  const handleMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const el = ref.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const px = (e.clientX - rect.left) / rect.width - 0.5;
+    const py = (e.clientY - rect.top) / rect.height - 0.5;
+    ry.set(px * 14);
+    rx.set(py * -14);
+  };
+
+  const handleLeave = () => {
+    rx.set(0);
+    ry.set(0);
+  };
+
   return (
-    <section className="relative min-h-[85vh] flex items-center overflow-hidden">
+    <motion.div
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.8, ease: "easeOut" }}
+      className="relative mx-auto lg:mx-0"
+    >
+      <motion.div
+        ref={ref}
+        onMouseMove={handleMove}
+        onMouseLeave={handleLeave}
+        style={{ rotateX: rx, rotateY: ry, transformPerspective: 900 }}
+        className="relative w-[280px] h-[340px] md:w-[320px] md:h-[400px]"
+      >
+        {/* Decorative frame offsets */}
+        <div className="absolute -inset-3 rounded-2xl border border-white/[0.06] -rotate-2" />
+        <div className="absolute -inset-1.5 rounded-2xl border border-white/[0.04] rotate-1" />
+
+        {/* Photo */}
+        <div
+          className="relative w-full h-full rounded-2xl overflow-hidden"
+          style={{ transform: "translateZ(40px)" }}
+        >
+          <Image
+            src="/images/profile.png"
+            alt="Aean Gabrielle D. Tayawa"
+            fill
+            className="object-cover object-center"
+            priority
+            sizes="320px"
+          />
+          <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#0a0a0a]/60 to-transparent" />
+        </div>
+
+        {/* Floating accent dot */}
+        <motion.div
+          animate={{ y: [0, -8, 0] }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+          style={{ transform: "translateZ(70px)" }}
+          className="absolute -top-4 -right-4 w-6 h-6 rounded-full bg-indigo-500/20 border border-indigo-500/30 backdrop-blur-sm"
+        />
+      </motion.div>
+    </motion.div>
+  );
+}
+
+const tags = [
+  { icon: MapPin, label: "Philippines" },
+  { icon: Briefcase, label: "Available for Work" },
+  { icon: GraduationCap, label: "BS Computer Engineering" },
+];
+
+export default function AboutHero() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end start"],
+  });
+  const contentY = useTransform(scrollYProgress, [0, 1], [0, 90]);
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
+
+  return (
+    <section
+      ref={sectionRef}
+      className="relative min-h-[85vh] flex items-center overflow-hidden"
+    >
       {/* Background gradient mesh */}
       <div className="absolute inset-0">
         <div
@@ -85,42 +165,12 @@ export default function AboutHero() {
         </div>
       </div>
 
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-8 md:px-16 py-24">
+      <motion.div
+        style={{ y: contentY, opacity: contentOpacity }}
+        className="relative z-10 w-full max-w-7xl mx-auto px-8 md:px-16 py-24"
+      >
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.2fr] gap-12 lg:gap-20 items-center">
-          {/* Profile photo */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            className="relative mx-auto lg:mx-0"
-          >
-            <div className="relative w-[280px] h-[340px] md:w-[320px] md:h-[400px]">
-              {/* Decorative frame offset */}
-              <div className="absolute -inset-3 rounded-2xl border border-white/[0.06] -rotate-2" />
-              <div className="absolute -inset-1.5 rounded-2xl border border-white/[0.04] rotate-1" />
-
-              {/* Photo */}
-              <div className="relative w-full h-full rounded-2xl overflow-hidden">
-                <Image
-                  src="/images/profile.png"
-                  alt="Aean Gabrielle D. Tayawa"
-                  fill
-                  className="object-cover object-center"
-                  priority
-                  sizes="320px"
-                />
-                {/* Subtle gradient overlay at bottom */}
-                <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#0a0a0a]/60 to-transparent" />
-              </div>
-
-              {/* Floating accent dot */}
-              <motion.div
-                animate={{ y: [0, -8, 0] }}
-                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute -top-4 -right-4 w-6 h-6 rounded-full bg-indigo-500/20 border border-indigo-500/30 backdrop-blur-sm"
-              />
-            </div>
-          </motion.div>
+          <TiltPhoto />
 
           {/* Text content */}
           <div>
@@ -130,18 +180,26 @@ export default function AboutHero() {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="flex flex-wrap items-center gap-3 mb-6"
             >
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/[0.06] border border-white/[0.08] font-mono text-[10px] tracking-[0.15em] uppercase text-gray-400">
-                <MapPin size={11} />
-                Philippines
-              </span>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/[0.06] border border-white/[0.08] font-mono text-[10px] tracking-[0.15em] uppercase text-gray-400">
-                <Briefcase size={11} />
-                Available for Work
-              </span>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/[0.06] border border-white/[0.08] font-mono text-[10px] tracking-[0.15em] uppercase text-gray-400">
-                <GraduationCap size={11} />
-                BS Computer Engineering
-              </span>
+              {tags.map((tag) => {
+                const Icon = tag.icon;
+                const isAvailable = tag.label === "Available for Work";
+                return (
+                  <span
+                    key={tag.label}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/[0.06] border border-white/[0.08] font-mono text-[10px] tracking-[0.15em] uppercase text-gray-400"
+                  >
+                    {isAvailable ? (
+                      <span className="relative flex h-2 w-2">
+                        <span className="absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75 animate-ping" />
+                        <span className="relative inline-flex h-2 w-2 rounded-full bg-green-400" />
+                      </span>
+                    ) : (
+                      <Icon size={11} />
+                    )}
+                    {tag.label}
+                  </span>
+                );
+              })}
             </motion.div>
 
             <motion.h1
@@ -195,8 +253,8 @@ export default function AboutHero() {
               key={stat.label}
               className="relative bg-surface border border-border-subtle rounded-xl p-5 text-center group hover:border-border-hover transition-colors duration-300"
             >
-              <div className="font-display text-2xl md:text-3xl font-bold text-white mb-1">
-                <AnimatedCounter
+              <div className="font-display text-2xl md:text-3xl font-bold text-white mb-1 tabular-nums">
+                <StatCounter
                   value={stat.value}
                   suffix={stat.suffix}
                   delay={0.8 + i * 0.15}
@@ -208,7 +266,7 @@ export default function AboutHero() {
             </div>
           ))}
         </motion.div>
-      </div>
+      </motion.div>
     </section>
   );
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { Project } from "@/types";
-import ScrollProgressBar from "./ScrollProgressBar";
+import SmoothScroll from "@/components/about/SmoothScroll";
 import BackToPortfolio from "./BackToPortfolio";
 import DetailHero from "./DetailHero";
 import TechStackSection from "./TechStackSection";
@@ -25,8 +25,7 @@ export default function ProjectDetailClient({
   totalProjects,
 }: Props) {
   return (
-    <div>
-      <ScrollProgressBar />
+    <SmoothScroll>
       <BackToPortfolio />
 
       <DetailHero
@@ -50,6 +49,6 @@ export default function ProjectDetailClient({
         prevProject={prevProject}
         nextProject={nextProject}
       />
-    </div>
+    </SmoothScroll>
   );
 }
