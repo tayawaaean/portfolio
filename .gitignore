@@ -35,3 +35,7 @@ next-env.d.ts
 
 # claude
 .claude/
+
+# project journal (local handoff doc, not tracked)
+JOURNAL.md
+DEVLOG.md
