@@ -225,9 +225,8 @@ export default function AboutHero() {
               I&apos;ve built plenty of production-ready systems from the ground
               up. From database architecture and backend APIs to polished
               frontend interfaces and deployment &mdash; I own the entire
-              development lifecycle. Currently leading a multidisciplinary dev
-              team and working with international clients across the US, Canada,
-              and Europe.
+              development lifecycle. Currently working with international clients
+              across the US, Canada, and Europe.
             </motion.p>
           </div>
         </div>

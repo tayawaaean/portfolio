@@ -12,7 +12,7 @@ Based in the Philippines | 3+ Years Experience | Available for remote work world
 
 I'm a full-stack developer and prompt engineer with 3+ years of professional experience building production-ready web applications from the ground up. I hold a Bachelor's degree in Computer Engineering and have shipped platforms across fitness, SaaS, marketplace, energy, and enterprise sectors.
 
-I handle everything from database architecture and backend APIs to polished frontend interfaces and deployment. My focus is on delivering clean, scalable code that solves real business problems, not just checking off feature lists. I also lead a multidisciplinary dev team to deliver end-to-end projects using Agile.
+I handle everything from database architecture and backend APIs to polished frontend interfaces and deployment. My focus is on delivering clean, scalable code that solves real business problems, not just checking off feature lists.
 
 I work primarily with international clients and am comfortable owning the entire development lifecycle from planning and proposals through to launch and handoff.
 
@@ -23,7 +23,6 @@ I work primarily with international clients and am comfortable owning the entire
 - **Education:** Bachelor of Science in Computer Engineering
 - **Experience:** 3+ years of professional full-stack development
 - **Notable Work:** Lead developer of [AREC GIS](https://arecgis.mmsu.edu.ph), a nationally recognized platform adopted by the Philippine Department of Energy (DOE) for tracking and managing renewable energy systems nationwide
-- **Team Leadership:** Lead a multidisciplinary development team delivering end-to-end projects using Agile methodology
 - **International Clients:** Active client base across the US, Canada, and Europe with proven remote collaboration track record
 
 > *Note: Some projects below are listed under NDA. Client names and proprietary details have been omitted, but the scope, tech stack, and my role are described accurately. Happy to discuss further under a mutual NDA if needed.*
