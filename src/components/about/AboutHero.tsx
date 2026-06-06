@@ -11,7 +11,7 @@ import {
 } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
 import NumberFlow from "@number-flow/react";
-import { MapPin, Briefcase, GraduationCap } from "lucide-react";
+import { MapPin, GraduationCap } from "lucide-react";
 
 const stats = [
   { value: 3, suffix: "+", label: "Years Experience" },
@@ -119,7 +119,6 @@ function TiltPhoto() {
 
 const tags = [
   { icon: MapPin, label: "Philippines" },
-  { icon: Briefcase, label: "Available for Work" },
   { icon: GraduationCap, label: "BS Computer Engineering" },
 ];
 
@@ -182,20 +181,12 @@ export default function AboutHero() {
             >
               {tags.map((tag) => {
                 const Icon = tag.icon;
-                const isAvailable = tag.label === "Available for Work";
                 return (
                   <span
                     key={tag.label}
                     className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/[0.06] border border-white/[0.08] font-mono text-[10px] tracking-[0.15em] uppercase text-gray-400"
                   >
-                    {isAvailable ? (
-                      <span className="relative flex h-2 w-2">
-                        <span className="absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75 animate-ping" />
-                        <span className="relative inline-flex h-2 w-2 rounded-full bg-green-400" />
-                      </span>
-                    ) : (
-                      <Icon size={11} />
-                    )}
+                    <Icon size={11} />
                     {tag.label}
                   </span>
                 );
