@@ -77,3 +77,50 @@ test("rejects a too-short body", () => {
   assert.equal(ok, false);
   assert.ok(errors.some((e) => /word count|words/i.test(e)));
 });
+
+// --- Hardening (review findings I1, I2, I3, M1) ---
+
+test("I1: rejects a raw HTML anchor to a non-existent project slug", () => {
+  const bad =
+    'See [svc](/services/full-stack-web-development) and [proj](/portfolio/djp-athlete-platform) and ' +
+    '<a href="/portfolio/totally-fake-slug">x</a> and [contact](/contact).';
+  const src = frontmatter() + body + bad;
+  const { ok, errors } = validatePost(src, SLUGS);
+  assert.equal(ok, false, "raw anchor with a fake slug must be caught");
+  assert.ok(errors.some((e) => /totally-fake-slug/.test(e)));
+});
+
+test("I2: rejects a trailing-slash link to a non-existent service slug", () => {
+  const bad =
+    "See [svc](/services/not-a-real-service/) and [proj](/portfolio/djp-athlete-platform) and [contact](/contact).";
+  const src = frontmatter() + body + bad;
+  const { ok, errors } = validatePost(src, SLUGS);
+  assert.equal(ok, false, "trailing slash must not bypass the slug allow-list");
+  assert.ok(errors.some((e) => /not-a-real-service/.test(e)));
+});
+
+test("M1: rejects /contact-us as the only CTA (needs exact /contact)", () => {
+  const noExactContact =
+    "See [svc](/services/full-stack-web-development) and [proj](/portfolio/djp-athlete-platform) and [c](/contact-us).";
+  const src = frontmatter() + body + noExactContact;
+  const { ok, errors } = validatePost(src, SLUGS);
+  assert.equal(ok, false);
+  assert.ok(errors.some((e) => /contact/i.test(e)));
+});
+
+test("I3: accepts CRLF endings + single-quoted title + flow-array keywords", () => {
+  const fm = [
+    "---",
+    "title: 'How to Hire a Developer'",
+    `description: "${goodDesc}"`,
+    "excerpt: a hook",
+    'date: "2026-06-15"',
+    "readingMinutes: 6",
+    "keywords: [hire developer, next.js]",
+    "---",
+    "",
+  ].join("\r\n");
+  const src = fm + body.replace(/\n/g, "\r\n") + goodLinks;
+  const { ok, errors } = validatePost(src, SLUGS);
+  assert.equal(ok, true, errors.join("; "));
+});

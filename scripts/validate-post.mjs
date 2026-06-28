@@ -1,6 +1,7 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
+import { getFrontmatter } from "next-mdx-remote-client/utils";
 
 const LIMITS = {
   titleMax: 60,
@@ -19,32 +20,43 @@ export function loadSlugs(dataDir) {
   return { serviceSlugs: read("services.ts"), projectSlugs: read("projects.ts") };
 }
 
-/** Split frontmatter block from body. Returns { fm: rawText, body }. */
-function splitFrontmatter(src) {
-  const m = src.match(/^---\n([\s\S]*?)\n---\n?([\s\S]*)$/);
-  if (!m) return { fm: "", body: src };
-  return { fm: m[1], body: m[2] };
+/** Strip #fragment, ?query, and a trailing slash so allow-list checks are exact. */
+function normalizeLink(href) {
+  let h = href.split("#")[0].split("?")[0];
+  if (h.length > 1 && h.endsWith("/")) h = h.slice(0, -1);
+  return h;
 }
 
-function fmString(fm, key) {
-  const m = fm.match(new RegExp(`^${key}:\\s*"([^"]*)"`, "m"));
-  return m ? m[1] : null;
-}
-
-function fmHasList(fm, key) {
-  const m = fm.match(new RegExp(`^${key}:\\s*\\n((?:\\s+-\\s.*\\n?)+)`, "m"));
-  return !!m && m[1].trim().length > 0;
+/** Collect internal links from BOTH Markdown `](/x)` and raw `href="/x"` (JSX/HTML). */
+function extractInternalLinks(body) {
+  const md = [...body.matchAll(/\]\((\/[^)\s]+)\)/g)].map((m) => m[1]);
+  const href = [...body.matchAll(/href\s*=\s*["'](\/[^"']+)["']/g)].map((m) => m[1]);
+  return [...md, ...href].map(normalizeLink);
 }
 
 export function validatePost(src, { serviceSlugs, projectSlugs }) {
   const errors = [];
-  const { fm, body } = splitFrontmatter(src);
-  if (!fm) errors.push("missing frontmatter block");
 
-  const title = fmString(fm, "title");
-  const desc = fmString(fm, "description");
-  const excerpt = fmString(fm, "excerpt");
-  const date = fmString(fm, "date");
+  // Parse frontmatter with the SAME parser the loader/renderer uses, so the
+  // validator never diverges from what next-mdx-remote-client accepts.
+  let frontmatter = {};
+  let body = src;
+  try {
+    const parsed = getFrontmatter(src);
+    frontmatter = parsed.frontmatter || {};
+    body = parsed.strippedSource || "";
+  } catch (e) {
+    return { ok: false, errors: [`frontmatter parse error: ${e.message}`] };
+  }
+  if (!frontmatter || Object.keys(frontmatter).length === 0)
+    errors.push("missing frontmatter block");
+
+  const title = typeof frontmatter.title === "string" ? frontmatter.title : null;
+  const desc =
+    typeof frontmatter.description === "string" ? frontmatter.description : null;
+  const excerpt =
+    typeof frontmatter.excerpt === "string" ? frontmatter.excerpt : null;
+  const date = typeof frontmatter.date === "string" ? frontmatter.date : null;
 
   if (!title) errors.push("missing title");
   else if (title.length > LIMITS.titleMax)
@@ -58,22 +70,23 @@ export function validatePost(src, { serviceSlugs, projectSlugs }) {
 
   if (!excerpt) errors.push("missing excerpt");
   if (!date || !/^\d{4}-\d{2}-\d{2}$/.test(date))
-    errors.push("missing or malformed date (YYYY-MM-DD)");
-  if (!/^readingMinutes:\s*\d+/m.test(fm))
-    errors.push("missing numeric readingMinutes");
-  if (!fmHasList(fm, "keywords")) errors.push("missing keywords list");
+    errors.push("missing or malformed date (quote it as \"YYYY-MM-DD\")");
+  if (typeof frontmatter.readingMinutes !== "number")
+    errors.push("missing numeric readingMinutes (unquoted integer)");
+  if (!Array.isArray(frontmatter.keywords) || frontmatter.keywords.length === 0)
+    errors.push("missing keywords list");
 
   const words = body.trim().split(/\s+/).filter(Boolean).length;
   if (words < LIMITS.wordsMin || words > LIMITS.wordsMax)
     errors.push(`body word count ${words} outside ${LIMITS.wordsMin}-${LIMITS.wordsMax}`);
 
-  const links = [...body.matchAll(/\]\((\/[^)\s]+)\)/g)].map((m) => m[1]);
+  const links = extractInternalLinks(body);
   const hasService = links.some((l) => l.startsWith("/services/"));
   const hasProject = links.some((l) => l.startsWith("/portfolio/"));
-  const hasContact = links.some((l) => l === "/contact" || l.startsWith("/contact"));
+  const hasContact = links.some((l) => l === "/contact");
   if (!hasService) errors.push("no internal link to a /services/<slug>");
   if (!hasProject) errors.push("no internal link to a /portfolio/<slug>");
-  if (!hasContact) errors.push("no /contact CTA link");
+  if (!hasContact) errors.push("no exact /contact CTA link");
 
   for (const l of links) {
     const sm = l.match(/^\/services\/([^/]+)$/);

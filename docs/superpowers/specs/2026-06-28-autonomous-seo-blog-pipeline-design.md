@@ -108,8 +108,13 @@ generation code runs inside the app.
 
 - **`scripts/validate-post.mjs`** — a Node ESM script of pure, testable checks
   runnable on any `.mdx` file. Enforces:
-  - frontmatter schema (all required fields present, correct types)
-  - slug uniqueness vs existing posts
+  - frontmatter schema (all required fields present, correct types) — parsed with
+    the same `getFrontmatter` the loader uses, so the validator never diverges from
+    what the renderer accepts
+  - slug uniqueness is structural (one `.mdx` file per slug) and reinforced by the
+    playbook's dedupe step, not a separate validator check
+  - internal links collected from BOTH Markdown and raw `href=` (JSX), normalized
+    (strip trailing slash / `#` / `?`) before the slug allow-list comparison
   - title ≤ 60 chars; `description` 150–160 chars
   - word count 1,000–1,500
   - ≥ 1 internal link to a real `/services/<slug>` (validated against `services.ts`)

@@ -20,6 +20,28 @@ export interface PostMeta {
 
 type Frontmatter = Omit<PostMeta, "slug">;
 
+/**
+ * Defense-in-depth: fail the build loudly on a malformed post, independent of
+ * the pre-publish validator. Keeps autonomously-published posts honest even if
+ * the validator is bypassed.
+ */
+function assertFrontmatter(slug: string, fm: Partial<Frontmatter>): void {
+  const problems: string[] = [];
+  if (typeof fm.title !== "string" || !fm.title) problems.push("title");
+  if (typeof fm.description !== "string" || !fm.description)
+    problems.push("description");
+  if (typeof fm.excerpt !== "string" || !fm.excerpt) problems.push("excerpt");
+  if (typeof fm.date !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(fm.date))
+    problems.push('date (quote it as "YYYY-MM-DD")');
+  if (typeof fm.readingMinutes !== "number") problems.push("readingMinutes");
+  if (!Array.isArray(fm.keywords) || fm.keywords.length === 0)
+    problems.push("keywords");
+  if (problems.length)
+    throw new Error(
+      `Invalid blog frontmatter in ${slug}.mdx: ${problems.join(", ")}`,
+    );
+}
+
 /** All posts' metadata (frontmatter only), newest-first. Memoized per render pass. */
 export const getAllPostsMeta = cache(async (): Promise<PostMeta[]> => {
   const entries = await fs.readdir(POSTS_DIR);
@@ -28,7 +50,9 @@ export const getAllPostsMeta = cache(async (): Promise<PostMeta[]> => {
     files.map(async (file) => {
       const source = await fs.readFile(path.join(POSTS_DIR, file), "utf8");
       const { frontmatter } = getFrontmatter<Frontmatter>(source);
-      return { slug: file.replace(/\.mdx$/, ""), ...frontmatter };
+      const slug = file.replace(/\.mdx$/, "");
+      assertFrontmatter(slug, frontmatter);
+      return { slug, ...frontmatter };
     }),
   );
   return metas.sort((a, b) => (a.date < b.date ? 1 : -1));
