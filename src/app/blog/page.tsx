@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Navbar from "@/components/layout/Navbar";
 import SocialIcons from "@/components/layout/SocialIcons";
-import { posts } from "@/content/blog/posts";
+import { getAllPostsMeta } from "@/content/blog/posts";
 
 const DESCRIPTION =
   "Guides and notes on building production web apps — hiring developers, Next.js, Stripe marketplaces, AI integration, and SEO — by full-stack developer Aean Tayawa.";
@@ -23,8 +23,8 @@ function formatDate(iso: string) {
   });
 }
 
-export default function BlogPage() {
-  const sorted = [...posts].sort((a, b) => (a.date < b.date ? 1 : -1));
+export default async function BlogPage() {
+  const sorted = await getAllPostsMeta();
 
   return (
     <main className="min-h-screen">

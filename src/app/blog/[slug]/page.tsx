@@ -2,14 +2,18 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
+import { MDXRemote } from "next-mdx-remote-client/rsc";
+import type { MDXComponents } from "next-mdx-remote-client/rsc";
 import Navbar from "@/components/layout/Navbar";
 import SocialIcons from "@/components/layout/SocialIcons";
 import JsonLd from "@/components/seo/JsonLd";
-import { posts } from "@/content/blog/posts";
+import { getAllPostsMeta, getPostSource } from "@/content/blog/posts";
 import { SITE_URL, SITE_NAME } from "@/lib/site";
 
-export function generateStaticParams() {
-  return posts.map((p) => ({ slug: p.slug }));
+export const dynamicParams = false;
+
+export async function generateStaticParams() {
+  return (await getAllPostsMeta()).map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({
@@ -18,7 +22,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const post = posts.find((p) => p.slug === slug);
+  const post = (await getAllPostsMeta()).find((p) => p.slug === slug);
   if (!post) {
     return { title: "Post Not Found", robots: { index: false, follow: false } };
   }
@@ -47,14 +51,37 @@ function formatDate(iso: string) {
   });
 }
 
+const components: MDXComponents = {
+  p: (props) => <p className="text-gray-300 leading-[1.8] mb-6" {...props} />,
+  h2: (props) => (
+    <h2
+      className="font-display text-2xl font-bold text-white mt-10 mb-4"
+      {...props}
+    />
+  ),
+  ul: (props) => <ul className="list-disc pl-6 mb-6 space-y-2" {...props} />,
+  li: (props) => <li className="text-gray-300 leading-[1.7]" {...props} />,
+  strong: (props) => <strong className="text-white" {...props} />,
+  em: (props) => <em className="text-gray-200" {...props} />,
+  a: (props) => (
+    <a
+      className="text-indigo-400 underline underline-offset-2 hover:text-indigo-300 transition-colors"
+      {...props}
+    />
+  ),
+};
+
 export default async function BlogPostPage({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const post = posts.find((p) => p.slug === slug);
-  if (!post) notFound();
+  const [post, source] = await Promise.all([
+    getAllPostsMeta().then((all) => all.find((p) => p.slug === slug)),
+    getPostSource(slug),
+  ]);
+  if (!post || !source) notFound();
 
   const articleLd = {
     "@context": "https://schema.org",
@@ -90,8 +117,12 @@ export default async function BlogPostPage({
           {post.title}
         </h1>
 
-        <div className="[&>p]:text-gray-300 [&>p]:leading-[1.8] [&>p]:mb-6 [&>h2]:font-display [&>h2]:text-2xl [&>h2]:font-bold [&>h2]:text-white [&>h2]:mt-10 [&>h2]:mb-4 [&>ul]:list-disc [&>ul]:pl-6 [&>ul]:mb-6 [&>ul]:space-y-2 [&>ul>li]:text-gray-300 [&>ul>li]:leading-[1.7] [&_strong]:text-white [&_em]:text-gray-200">
-          {post.body}
+        <div>
+          <MDXRemote
+            source={source}
+            options={{ parseFrontmatter: true }}
+            components={components}
+          />
         </div>
 
         <div className="mt-14 pt-8 border-t border-border-subtle">

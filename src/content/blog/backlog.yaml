@@ -1,0 +1,62 @@
+# Autonomous blog topic backlog — the single place to steer the blog.
+# Edit freely: add/reorder/remove topics. The agent always takes the TOP
+# item with status: pending, writes it, then sets status: published +
+# publishedSlug. Set `paused: true` to halt all publishing (kill switch).
+paused: false
+
+topics:
+  - topic: "How much does it cost to build an MVP in 2026"
+    targetKeyword: "cost to build an mvp"
+    intent: cost
+    linkServices: [full-stack-web-development]
+    status: pending
+    publishedSlug: null
+
+  - topic: "MVP vs full product: what to build first as a startup"
+    targetKeyword: "mvp development for startups"
+    intent: how-to
+    linkServices: [full-stack-web-development]
+    status: pending
+    publishedSlug: null
+
+  - topic: "What does it cost to integrate Stripe payments"
+    targetKeyword: "stripe payment integration cost"
+    intent: cost
+    linkServices: [payment-integration]
+    status: pending
+    publishedSlug: null
+
+  - topic: "How to add AI features to an existing web app"
+    targetKeyword: "add ai to web app"
+    intent: how-to
+    linkServices: [ai-integration]
+    status: pending
+    publishedSlug: null
+
+  - topic: "Next.js vs WordPress for a startup website"
+    targetKeyword: "next.js vs wordpress"
+    intent: comparison
+    linkServices: [full-stack-web-development]
+    status: pending
+    publishedSlug: null
+
+  - topic: "Why turn your web app into a PWA"
+    targetKeyword: "progressive web app benefits"
+    intent: how-to
+    linkServices: [progressive-web-apps]
+    status: pending
+    publishedSlug: null
+
+  - topic: "Hiring an offshore developer in the Philippines: a founder's guide"
+    targetKeyword: "hire developer philippines"
+    intent: hire
+    linkServices: [full-stack-web-development]
+    status: pending
+    publishedSlug: null
+
+  - topic: "Building a two-sided booking platform: features and timeline"
+    targetKeyword: "booking platform development"
+    intent: how-to
+    linkServices: [saas-marketplace-development]
+    status: pending
+    publishedSlug: null
