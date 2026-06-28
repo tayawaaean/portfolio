@@ -69,7 +69,7 @@ generation code runs inside the app.
   Validates required frontmatter fields and unique slugs at load time.
 - **Rendering** — [src/app/blog/[slug]/page.tsx](../../../src/app/blog/[slug]/page.tsx)
   keeps its current layout, JSON-LD, metadata, and CTA. Only the body source changes:
-  compile the MDX string with `next-mdx-remote/rsc` inside the existing RSC page,
+  compile the MDX string with `next-mdx-remote-client/rsc` inside the existing RSC page,
   using a components map that applies the current Tailwind prose styling (the
   `[&>p]:…` arbitrary-variant classes already on the wrapper) to MDX elements.
 - **Index & sitemap** — [src/app/blog/page.tsx](../../../src/app/blog/page.tsx) and
@@ -77,9 +77,10 @@ generation code runs inside the app.
   `import { posts } from "@/content/blog/posts"` to the `getAllPosts()` loader.
 - **Migration** — convert the two existing seed posts in `src/content/blog/posts.tsx`
   to `.mdx` (preserving slugs, dates, keywords, and copy) and delete `posts.tsx`.
-- **New dependencies:** `next-mdx-remote`, `gray-matter`. MDX inherently needs a
-  compiler; these are the standard App Router choice and were accepted with the
-  MDX decision.
+- **New dependency:** `next-mdx-remote-client@^2` (the maintained, React-19 fork;
+  the original `next-mdx-remote` is archived and carries CVE-2026-0969, which
+  Vercel blocks on deploy). Frontmatter is parsed natively (`parseFrontmatter` /
+  `getFrontmatter`) — no `gray-matter`. No `next.config.mjs` changes.
 
 ### 2. Topic backlog (the user's control surface)
 
