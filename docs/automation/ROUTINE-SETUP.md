@@ -1,34 +1,52 @@
-# Activating the weekly blog routine (one-time, owner-run)
+# Activating the weekly blog automation
 
-Everything in the app is built and committed. These are the only steps left, and
-they are intentionally left to you because they publish to the live site.
+The scalable setup is a **GitHub Actions** workflow ([.github/workflows/blog.yml](../../.github/workflows/blog.yml))
+that runs weekly, generates one post on your **Claude Max subscription** (no API
+bill), and pushes it (Vercel auto-deploys). It needs **no personal access token** —
+the workflow's built-in `GITHUB_TOKEN` already has write access to this repo.
 
-## Preconditions
-1. **Confirm the production/deploy branch** Vercel builds (e.g. `main`). The routine
-   must commit/push to that branch. Merge `feat/blog-pipeline` into it first.
-2. **GitHub push credential** for the cloud runner: create a fine-grained PAT scoped
-   to this repo with Contents: read/write. The routine uses it to push.
+## One-time setup (≈2 minutes)
 
-## Create the routine
-Use the Claude Code scheduling skill (`/schedule`) to create a weekly routine:
-- Schedule: weekly (e.g. Mondays 09:00 your timezone).
-- Working dir: this repo, on the production branch.
-- Prompt: "Follow docs/automation/blog-playbook.md to generate, validate, and
-  publish exactly one new blog post. Obey its stop conditions."
+1. **Mint a subscription token** (locally, requires Pro/Max — does NOT use an API key):
 
-## Kill switch & control
-- Pause anytime: set `paused: true` in `src/content/blog/backlog.yaml` and commit.
-- Steer topics: edit `backlog.yaml` (add/reorder/remove pending topics).
-- Roll back a bad post: `git revert <commit>` and push.
+   ```bash
+   claude setup-token
+   ```
 
-## First run
-Trigger the routine once manually and review the resulting commit/deploy before
-trusting the weekly cadence.
+   Copy the token it prints (valid ~1 year).
 
-## What's already done (no action needed)
-- MDX blog rendering (`next-mdx-remote-client`), the post loader, sitemap + index
-  wired to it, the two seed posts migrated and expanded.
-- The topic backlog (`src/content/blog/backlog.yaml`) with 8 seeded buyer-intent
-  topics and the `paused` kill switch.
-- The validator (`scripts/validate-post.mjs`) + tests, and the agent playbook
-  (`docs/automation/blog-playbook.md`).
+2. **Add it as a GitHub Actions secret:**
+   - Repo → **Settings → Secrets and variables → Actions → New repository secret**
+   - Name: `CLAUDE_CODE_OAUTH_TOKEN`
+   - Value: the token from step 1
+   - Make sure there is **no** `ANTHROPIC_API_KEY` secret (it would override the
+     subscription and bill per token).
+
+3. **Test it now** (don't wait for Monday):
+   - Repo → **Actions → "Weekly autonomous SEO blog post" → Run workflow**.
+   - Watch the run; on success a new post lands on `main` and Vercel deploys.
+
+That's it. After this it runs every **Monday 09:00 Asia/Singapore** on its own.
+
+## Why this design
+
+- **No PAT to manage** — `GITHUB_TOKEN` is auto-scoped to this repo and rotates itself.
+- **Free generation** — runs on your Max plan via the OAuth token, not a metered API key.
+- **Free to run** — Actions minutes are unlimited on public repos and have a generous
+  monthly free quota on private repos (a weekly job uses a few minutes).
+- **Reversible** — one post = one commit (`git revert` to undo).
+
+## Control & maintenance
+
+- **Steer topics:** edit `src/content/blog/backlog.yaml` (add/reorder/remove `pending` topics).
+- **Pause:** set `paused: true` in `backlog.yaml` and commit.
+- **Cadence:** change the `cron` in `.github/workflows/blog.yml`.
+- **Token renewal:** the subscription token expires after ~1 year — re-run
+  `claude setup-token` and update the secret. (Set a reminder.)
+
+## Notes / status
+
+- The earlier **claude.ai cloud routine** (`trig_011ZfD1o64H8jwk78N8Wxzsk`) was the first
+  attempt; it could generate but its sandbox has read-only git (push 403). It has been
+  **disabled** in favor of this Actions workflow. The local `.env.local` `BLOG_BOT_TOKEN`
+  PAT is no longer needed for this setup.

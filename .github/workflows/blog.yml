@@ -1,0 +1,54 @@
+name: Weekly autonomous SEO blog post
+
+# Generates one buyer-intent blog post a week on the Claude Max subscription,
+# then commits + pushes it (Vercel auto-deploys). No PAT needed — the built-in
+# GITHUB_TOKEN below has write access to this repo.
+
+on:
+  schedule:
+    - cron: "0 1 * * 1" # Mondays 01:00 UTC = 09:00 Asia/Singapore
+  workflow_dispatch: {} # lets you run it on demand from the Actions tab
+
+permissions:
+  contents: write # allows the job to push the new post to main
+
+concurrency:
+  group: blog-generator
+  cancel-in-progress: false
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - run: npm ci
+
+      - name: Generate, validate, build & publish (Claude on Max subscription)
+        uses: anthropics/claude-code-action@v1
+        with:
+          prompt: |
+            Follow docs/automation/blog-playbook.md to generate, validate, build, and
+            publish exactly ONE new blog post. Obey its stop conditions: if
+            src/content/blog/backlog.yaml has `paused: true` or no topic with
+            `status: pending`, make NO changes and report why.
+
+            Ground every claim about Aean's work ONLY in src/data/* (projects.ts,
+            services.ts, testimonials.ts, skills.ts). Never invent clients, metrics, or
+            testimonials; never claim Aean leads or manages a team. Internal links must
+            use slugs that actually exist in services.ts / projects.ts.
+
+            Run the build gate before publishing — `node scripts/validate-post.mjs <file>`,
+            then `npx tsc --noEmit`, then `npx next build` — and only if all pass, set the
+            topic's `status: published` + `publishedSlug` in backlog.yaml, commit ONLY the
+            new post + backlog change with message "content: publish blog post — <title>",
+            and run `git push origin main`. Never publish a post that fails the gate.
+          claude_args: "--model claude-sonnet-4-6 --max-turns 60"
+        env:
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
