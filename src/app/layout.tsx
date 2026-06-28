@@ -68,6 +68,9 @@ export const metadata: Metadata = {
       "max-video-preview": -1,
     },
   },
+  verification: {
+    other: { "msvalidate.01": "66BFFBBFABCBFC74FB5080101B9F9205" },
+  },
 };
 
 const personLd = {
