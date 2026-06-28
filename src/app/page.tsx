@@ -1,35 +1,15 @@
-"use client";
+import type { Metadata } from "next";
+import HomeClient from "@/components/home/HomeClient";
 
-import { useState, useEffect } from "react";
-import Navbar from "@/components/layout/Navbar";
-import SocialIcons from "@/components/layout/SocialIcons";
-import HeroSection from "@/components/home/HeroSection";
-import IntroSequence from "@/components/home/IntroSequence";
+const DESCRIPTION =
+  "Hire Aean Tayawa — a full-stack Next.js, React & TypeScript developer shipping production-ready web apps, marketplaces, and AI integrations for startups and agencies across the US, Canada, and Europe.";
+
+export const metadata: Metadata = {
+  description: DESCRIPTION,
+  alternates: { canonical: "/" },
+  openGraph: { url: "/", description: DESCRIPTION },
+};
 
 export default function Home() {
-  const [showIntro, setShowIntro] = useState(false);
-  const [ready, setReady] = useState(false);
-
-  useEffect(() => {
-    const seen = sessionStorage.getItem("intro-seen");
-    if (!seen) {
-      setShowIntro(true);
-    }
-    setReady(true);
-  }, []);
-
-  const handleIntroEnd = () => {
-    sessionStorage.setItem("intro-seen", "1");
-  };
-
-  if (!ready) return null;
-
-  return (
-    <main>
-      {showIntro && <IntroSequence onEnd={handleIntroEnd} />}
-      <Navbar />
-      <HeroSection />
-      <SocialIcons />
-    </main>
-  );
+  return <HomeClient />;
 }

@@ -1,8 +1,23 @@
+import type { Metadata } from "next";
 import Navbar from "@/components/layout/Navbar";
 import SocialIcons from "@/components/layout/SocialIcons";
 import ContactForm from "@/components/contact/ContactForm";
 import ContactInfo from "@/components/contact/ContactInfo";
 import ScrollReveal from "@/components/ui/ScrollReveal";
+
+const DESCRIPTION =
+  "Get in touch to hire Aean Tayawa for Next.js, React, and AI web app projects — available for remote freelance and contract work with clients in the US, Canada, and Europe.";
+
+export const metadata: Metadata = {
+  title: "Contact — Hire a Full-Stack Developer",
+  description: DESCRIPTION,
+  alternates: { canonical: "/contact" },
+  openGraph: {
+    title: "Contact — Hire a Full-Stack Developer | Aean Tayawa",
+    description: DESCRIPTION,
+    url: "/contact",
+  },
+};
 
 export default function ContactPage() {
   return (
