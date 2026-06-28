@@ -3,6 +3,7 @@ import { Playfair_Display, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { SITE_URL, SITE_NAME, SITE_SHORT_NAME } from "@/lib/site";
 import JsonLd from "@/components/seo/JsonLd";
+import Footer from "@/components/layout/Footer";
 import { socials } from "@/data/socials";
 import { skills } from "@/data/skills";
 
@@ -108,6 +109,7 @@ export default function RootLayout({
       >
         <JsonLd data={[personLd, websiteLd]} />
         {children}
+        <Footer />
       </body>
     </html>
   );

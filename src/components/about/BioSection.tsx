@@ -58,6 +58,10 @@ export default function BioSection() {
         </span>
       </motion.div>
 
+      {/* Section heading for document outline (H1 -> H2 -> H3); visually the
+          lead statement below serves as the heading. */}
+      <h2 className="sr-only">About my work and approach</h2>
+
       {/* Lead statement — read-along reveal */}
       <ScrollReveal className="font-display text-2xl md:text-4xl lg:text-[2.75rem] font-medium leading-[1.25] max-w-4xl mb-28 md:mb-44">
         From conceptualization to deployment, I thrive on turning complex requirements into elegant, scalable software that people genuinely enjoy using.

@@ -160,7 +160,10 @@ function PublicCardContent({
         <div className="absolute inset-0 transition-transform duration-700 group-hover:scale-105">
           <Image
             src={project.image}
-            alt={project.title}
+            alt={
+              project.imageAlt ??
+              `${project.title} — ${project.category} screenshot`
+            }
             fill
             className="object-cover object-top"
             loading="lazy"

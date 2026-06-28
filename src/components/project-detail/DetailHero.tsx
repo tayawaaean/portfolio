@@ -67,7 +67,10 @@ export default function DetailHero({
         {imageExists ? (
           <Image
             src={project.image}
-            alt={project.title}
+            alt={
+              project.imageAlt ??
+              `${project.title} — ${project.category} screenshot`
+            }
             fill
             priority
             className="object-cover object-top"

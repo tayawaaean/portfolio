@@ -8,6 +8,7 @@ export interface Project {
   techStack: string[];
   keyFeatures: string[];
   image: string;
+  imageAlt?: string;
   githubUrl?: string;
   liveUrl?: string;
   isNda: boolean;

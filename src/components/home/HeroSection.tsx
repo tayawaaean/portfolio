@@ -1,7 +1,9 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { motion } from "framer-motion";
+import { ArrowRight } from "lucide-react";
 
 export default function HeroSection() {
   return (
@@ -60,10 +62,37 @@ export default function HeroSection() {
             transition={{ duration: 0.6, delay: 0.7 }}
             className="text-gray-400 text-sm md:text-base leading-relaxed max-w-md font-mono"
           >
-            Mabuhay! I&apos;m a multidisciplinary Full Stack Developer
-            crafting robust and elegant digital solutions with expertise in both
-            front-end and back-end technologies. Based in the Philippines.
+            Mabuhay! I&apos;m a multidisciplinary full-stack developer building
+            production-ready web apps, marketplaces, and AI features for clients
+            across the US, Canada, and Europe. Based in the Philippines,
+            available remotely.
           </motion.p>
+
+          {/* Calls to action */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.85 }}
+            className="mt-8 flex flex-wrap items-center gap-3"
+          >
+            <Link
+              href="/contact"
+              className="group inline-flex items-center gap-2 px-6 py-3 bg-white text-black font-mono text-sm tracking-wider rounded-full hover:bg-gray-200 transition-all duration-300"
+            >
+              Start a project
+              <ArrowRight
+                size={16}
+                className="group-hover:translate-x-1 transition-transform duration-300"
+              />
+            </Link>
+            <Link
+              href="/portfolio"
+              className="inline-flex items-center gap-2 px-6 py-3 border border-white/20 text-white font-mono text-sm tracking-wider rounded-full hover:bg-white hover:text-black transition-all duration-300"
+            >
+              View my work
+            </Link>
+          </motion.div>
         </div>
       </div>
     </section>

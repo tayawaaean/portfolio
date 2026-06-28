@@ -1,19 +1,29 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import dynamic from "next/dynamic";
+import { useReducedMotion } from "framer-motion";
 import Navbar from "@/components/layout/Navbar";
 import SocialIcons from "@/components/layout/SocialIcons";
 import HeroSection from "@/components/home/HeroSection";
-import IntroSequence from "@/components/home/IntroSequence";
+
+// The intro is a heavy framer-motion sequence; load it only when shown so it
+// stays out of the critical hero bundle.
+const IntroSequence = dynamic(
+  () => import("@/components/home/IntroSequence"),
+  { ssr: false }
+);
 
 export default function HomeClient() {
   const [showIntro, setShowIntro] = useState(false);
+  const reduceMotion = useReducedMotion();
 
   useEffect(() => {
-    if (!sessionStorage.getItem("intro-seen")) {
+    // Skip the splash for reduced-motion users and on repeat visits.
+    if (!reduceMotion && !sessionStorage.getItem("intro-seen")) {
       setShowIntro(true);
     }
-  }, []);
+  }, [reduceMotion]);
 
   const handleIntroEnd = () => {
     sessionStorage.setItem("intro-seen", "1");

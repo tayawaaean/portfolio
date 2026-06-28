@@ -10,6 +10,7 @@ import AboutHero from "@/components/about/AboutHero";
 import BioSection from "@/components/about/BioSection";
 import SkillsSection from "@/components/about/SkillsSection";
 import TimelineSection from "@/components/about/TimelineSection";
+import TestimonialsSection from "@/components/about/TestimonialsSection";
 import ServicesSection from "@/components/about/ServicesSection";
 import Magnetic from "@/components/about/Magnetic";
 
@@ -37,6 +38,9 @@ export default function AboutClient() {
         </div>
 
         <TimelineSection />
+
+        {/* Testimonials (renders only when real testimonials exist) */}
+        <TestimonialsSection />
 
         {/* Divider */}
         <div className="max-w-6xl mx-auto px-8 md:px-16">

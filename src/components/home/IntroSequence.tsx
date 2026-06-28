@@ -115,8 +115,8 @@ function IntroLanding({
           Welcome to my portfolio
         </motion.p>
 
-        {/* Name */}
-        <motion.h1
+        {/* Name (visual splash only — not the page H1) */}
+        <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.5 }}
@@ -125,7 +125,7 @@ function IntroLanding({
           Aean Gabrielle
           <br />
           <span className="text-gray-400">D. Tayawa</span>
-        </motion.h1>
+        </motion.p>
 
         {/* Line */}
         <motion.div
@@ -243,9 +243,9 @@ function StorySection({
           style={{ width: lineWidth }}
           className="h-[1px] bg-gradient-to-r from-transparent via-white/40 to-transparent mx-auto mb-8"
         />
-        <h2 className="font-display text-4xl md:text-6xl lg:text-7xl font-bold text-white leading-[1.1] mb-4">
+        <p className="font-display text-4xl md:text-6xl lg:text-7xl font-bold text-white leading-[1.1] mb-4">
           {line.text}
-        </h2>
+        </p>
         <motion.p
           style={{ opacity: subOpacity, y: subY }}
           className="font-mono text-base md:text-lg text-gray-400 tracking-wider"

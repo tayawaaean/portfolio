@@ -242,7 +242,10 @@ function PreviewVisual({
     return (
       <Image
         src={project.image}
-        alt={project.title}
+        alt={
+          project.imageAlt ??
+          `${project.title} — ${project.category} screenshot`
+        }
         fill
         className="object-cover object-top"
         sizes={compact ? "64px" : "420px"}

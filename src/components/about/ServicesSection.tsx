@@ -11,8 +11,22 @@ import {
   Search,
   Cloud,
 } from "lucide-react";
+import Link from "next/link";
 import SpotlightCard from "./SpotlightCard";
 import SectionHeading from "./SectionHeading";
+
+// Maps each capability card to its dedicated, indexable /services page
+// (or the hub for the lighter-weight ones).
+const serviceHref: Record<string, string> = {
+  "Full-Stack Web Development": "/services/full-stack-web-development",
+  "Progressive Web Apps": "/services/progressive-web-apps",
+  "SaaS & Marketplace Platforms": "/services/saas-marketplace-development",
+  "Payment Systems": "/services/payment-integration",
+  "AI-Powered Features": "/services/ai-integration",
+  "GIS & Mapping": "/services/gis-mapping",
+  "SEO & Performance": "/services",
+  "DevOps & Deployment": "/services",
+};
 
 const services = [
   {
@@ -111,6 +125,10 @@ export default function ServicesSection() {
           const Icon = service.icon;
           return (
             <motion.div key={service.title} variants={cardVariants} className="h-full">
+              <Link
+                href={serviceHref[service.title] ?? "/services"}
+                className="block h-full"
+              >
               <SpotlightCard
                 accent={service.accent}
                 className="bg-surface border border-border-subtle rounded-xl p-5 h-full hover:border-border-hover transition-colors duration-300"
@@ -137,6 +155,7 @@ export default function ServicesSection() {
                   {service.description}
                 </p>
               </SpotlightCard>
+              </Link>
             </motion.div>
           );
         })}
