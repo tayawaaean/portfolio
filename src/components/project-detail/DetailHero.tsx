@@ -15,6 +15,9 @@ const AVAILABLE_IMAGES = new Set([
   "/images/projects/efficyon.png",
   "/images/projects/mayhemcreation.png",
   "/images/projects/video.png",
+  "/images/projects/lgbtalent.png",
+  "/images/projects/hairvana.png",
+  "/images/projects/elliereid.png",
 ]);
 
 interface DetailHeroProps {

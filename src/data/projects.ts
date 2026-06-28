@@ -34,6 +34,57 @@ export const projects: Project[] = [
     isNda: false,
   },
   {
+    slug: "entertainment-booking-marketplace",
+    title: "LGBTalent",
+    category: "LGBTQ+ Entertainment Booking Marketplace",
+    description:
+      "A curated two-sided marketplace for booking LGBTQ+ performers — drag, music, comedy, and cabaret. Every artist is human-reviewed, with structured booking requests, artist-first contracts, Stripe-secured payments, and travel coordination managed in one platform.",
+    challenge:
+      "The LGBTQ+ entertainment scene relied on scattered DMs and email threads for bookings, with no unified platform for the full lifecycle — discovery, negotiation, contracts, payments, and travel — and no protections built around the artist.",
+    solution:
+      "Built a curated two-sided marketplace with human-reviewed artist profiles, structured booking requests, auto-generated artist-first contracts, and secure Stripe payments where performers keep 100% and organizers pay a small booking fee, plus integrated travel coordination and approval workflows.",
+    techStack: [
+      "Next.js",
+      "TypeScript",
+      "Supabase",
+      "Stripe Connect",
+      "Tailwind CSS",
+    ],
+    keyFeatures: [
+      "Curated, human-reviewed performer profiles",
+      "Structured booking requests replacing scattered DMs",
+      "Auto-generated, artist-first contracts and riders",
+      "Secure Stripe payments — performers keep 100%",
+      "Travel coordination with itineraries and approvals",
+      "Multi-role system: performers, organizers, managers, admins",
+    ],
+    image: "/images/projects/lgbtalent.png",
+    liveUrl: "https://lgbtalent.com",
+    isNda: false,
+  },
+  {
+    slug: "salon-management",
+    title: "Hairvana",
+    category: "Salon Management CRM",
+    description:
+      "A professional salon management CRM for salon chains, independent stylists, and educators — covering appointment tracking, retail sales, commission structures, revenue management, and marketing campaign ROI.",
+    challenge:
+      "Salon chains needed a unified CRM supporting multiple roles (owners, commission stylists, booth renters, educators) with per-stylist analytics and marketing ROI tracking.",
+    solution:
+      "Built a multi-role CRM with appointment and retail sales tracking, per-stylist analytics, marketing ROI calculator, and a custom landing page builder for campaign-specific promotions.",
+    techStack: ["Next.js", "React", "Supabase", "Stripe", "Tailwind CSS"],
+    keyFeatures: [
+      "Multi-role access: owners, stylists, renters, educators",
+      "Appointment tracking and revenue management",
+      "Retail sales and commission tracking",
+      "ROI calculator for marketing campaigns",
+      "Custom landing page builder for promotions",
+    ],
+    image: "/images/projects/hairvana.png",
+    liveUrl: "https://hairvana.io",
+    isNda: false,
+  },
+  {
     slug: "athlete-performance-monitoring",
     title: "Athlete Performance & Injury Monitoring",
     category: "Sports Analytics Dashboard",
@@ -177,34 +228,6 @@ export const projects: Project[] = [
     isNda: true,
   },
   {
-    slug: "entertainment-booking-marketplace",
-    title: "Entertainment Booking Marketplace",
-    category: "Entertainment & Events Industry",
-    description:
-      "A two-sided marketplace connecting performers with event organizers. Features booking flow with negotiation, automated contracts, Stripe Connect payment splitting, and travel management.",
-    challenge:
-      "The entertainment industry lacked a unified platform for the complete booking lifecycle — from discovery and negotiation through contract generation, payment splitting, and travel coordination.",
-    solution:
-      "Built a two-sided marketplace with full booking lifecycle management, Stripe Connect for automated payment splitting, smart redistribution for declined requests, and integrated travel booking with approval workflows.",
-    techStack: [
-      "Next.js",
-      "TypeScript",
-      "Supabase",
-      "Stripe Connect",
-      "Tailwind CSS",
-    ],
-    keyFeatures: [
-      "Full booking lifecycle: discovery through post-event",
-      "Stripe Connect with automated payment splitting",
-      "Smart redistribution for declined requests",
-      "Travel booking with itinerary and approval workflows",
-      "Auto-generated contracts and rider management",
-      "Multi-role system: performers, organizers, managers, admins",
-    ],
-    image: "/images/projects/entertainment-booking.png",
-    isNda: true,
-  },
-  {
     slug: "arec-gis-platform",
     title: "AREC GIS Platform",
     category: "Renewable Energy / Government",
@@ -264,14 +287,14 @@ export const projects: Project[] = [
   },
   {
     slug: "market-picking-assistant",
-    title: "Market Picking Assistant",
-    category: "SaaS / Data Analytics",
+    title: "EllieReid",
+    category: "Market Intelligence / Home Services",
     description:
-      "A data-driven market analysis tool that helps home service companies identify high-potential service areas using Census data, Google Places competition analysis, and Google Trends demand signals.",
+      "A market-intelligence terminal for home-service operators. Combines six authoritative data sources and a four-pillar scoring system to surface high-potential service areas, with a narrative market brief on every ZIP in America.",
     challenge:
-      "Home service businesses had no systematic way to identify high-potential service areas, relying on intuition rather than data-driven analysis of demographics and competition.",
+      "Home service businesses had no systematic way to identify high-potential service areas, relying on intuition rather than data-driven analysis of demographics, demand, and competition.",
     solution:
-      "Built a multi-source data aggregation platform combining Census demographics, Google Places competition analysis, and Google Trends demand signals with heatmap visualizations for market opportunity scoring.",
+      "Built a multi-source market-intelligence platform that scores 50,000+ U.S. ZIP codes across four pillars, aggregating Census demographics, competition, and demand signals into heatmaps and an auto-generated narrative brief for every market.",
     techStack: [
       "Next.js",
       "React",
@@ -281,32 +304,14 @@ export const projects: Project[] = [
       "Google Trends",
     ],
     keyFeatures: [
-      "Multi-source data aggregation for market analysis",
+      "Four-pillar opportunity scoring across 50,000+ U.S. ZIP codes",
+      "Six authoritative data sources aggregated into one terminal",
+      "Auto-generated narrative market brief for every ZIP",
       "Heatmap visualizations for opportunity scoring",
       "Customizable filtering by service type and density",
     ],
-    image: "/images/projects/market-picking.png",
-    isNda: true,
-  },
-  {
-    slug: "salon-management",
-    title: "Salon & Stylist Management Platform",
-    category: "Beauty & Salon Industry",
-    description:
-      "A comprehensive CRM for salon chains, independent stylists, and educators. Tracks appointments, retail sales, commission structures, and marketing campaign ROI.",
-    challenge:
-      "Salon chains needed a unified CRM supporting multiple roles (owners, commission stylists, booth renters, educators) with per-stylist analytics and marketing ROI tracking.",
-    solution:
-      "Built a multi-role CRM with appointment and retail sales tracking, per-stylist analytics, marketing ROI calculator, and a custom landing page builder for campaign-specific promotions.",
-    techStack: ["Next.js", "React", "Supabase", "Stripe", "Tailwind CSS"],
-    keyFeatures: [
-      "Multi-role access: owners, stylists, renters, educators",
-      "Appointment and retail sales tracking",
-      "ROI calculator for marketing campaigns",
-      "Custom landing page builder for promotions",
-    ],
-    image: "/images/projects/salon-management.png",
-    isNda: true,
+    image: "/images/projects/elliereid.png",
+    isNda: false,
   },
   {
     slug: "mayhem-creations",
