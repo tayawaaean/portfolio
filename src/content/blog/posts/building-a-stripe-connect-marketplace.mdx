@@ -1,0 +1,56 @@
+---
+title: "Building a Stripe Connect Marketplace: What It Takes"
+description: "A grounded look at building a two-sided marketplace with Stripe Connect: the flows you must get right, where teams get burned, and a realistic timeline."
+excerpt: "Marketplaces are harder than they look. Here are the Stripe Connect flows you must get right and where most teams get burned."
+date: "2026-06-22"
+readingMinutes: 8
+keywords:
+  - "stripe connect marketplace"
+  - "build a marketplace"
+  - "two-sided marketplace development"
+  - "marketplace payments"
+---
+
+A marketplace looks simple from the outside: buyers on one side, sellers on the other, payments in the middle. The reality is that the middle is where almost all of the engineering effort goes — and where marketplaces quietly lose money when it is done carelessly. If you are planning a platform where you take a cut of transactions between other people, the payments layer is not a detail you bolt on at the end. It is the product.
+
+## Why marketplaces are harder than they look
+
+A normal store moves money from a customer to you. A marketplace moves money from a customer to *someone else*, takes a cut, and then has to handle refunds, disputes, payout timing, and tax across every one of those transactions. Each of those is a small state machine with its own failure paths, and your database has to stay consistent with what actually happened at the payment provider — not what your app thinks happened. Multiply that by two sides of a market who both expect to be paid correctly and on time, and you can see why "just add Stripe" badly undersells the work. This is the core of my [SaaS and marketplace development](/services/saas-marketplace-development) work.
+
+## Stripe Connect in one paragraph
+
+Stripe Connect lets a platform onboard sellers, accept a payment from a buyer, automatically split it (your platform fee plus the seller's payout), and handle the seller's identity verification, compliance, and bank details. It removes an enormous amount of work that would otherwise involve money-transmission licensing and direct bank integrations. But Connect is a toolkit, not a finished marketplace — you still have to design the flows around it correctly, which is where careful [payment integration](/services/payment-integration) earns its keep.
+
+## Choose the right account type early
+
+Connect offers a few onboarding models, and switching later is painful, so decide up front. **Standard** accounts give sellers a full Stripe dashboard and put compliance on them — least work for you, least control over the experience. **Express** is the common marketplace choice: Stripe hosts a streamlined onboarding and payout dashboard while you keep control of the core flow. **Custom** lets you build the entire experience yourself and own every screen, at the cost of taking on much more responsibility for onboarding and compliance UI. Most two-sided marketplaces start with Express because it balances a clean seller experience against a manageable build.
+
+## The flows you must get right
+
+- **Onboarding:** sellers must complete Stripe's identity verification before they can be paid. Your UI has to handle the "started but not yet ready" state gracefully, because real people abandon onboarding halfway and come back later.
+- **The split:** decide between application fees on a destination charge versus separate transfers, and make every split auditable so you can answer "where did this money go" months later.
+- **Refunds and disputes:** decide who absorbs the cost and how it reflects in the seller's balance, including what happens when a seller has already been paid out.
+- **Payout timing:** sellers care enormously about when money lands. Understand Stripe's payout schedule and whether you need to hold funds — for example, until a service is actually delivered.
+- **Webhooks as the source of truth:** treat Stripe webhooks as truth and reconcile your database against them. Never assume a client-side "success" means the money actually moved.
+
+## The fee math, with an example
+
+The economics only work if you model them honestly. Say a buyer pays $100 for a booking and your platform takes a 10% fee. Stripe's processing fee (roughly 2.9% + 30 cents on card payments, depending on region) comes out of the transaction — and you have to decide who pays it. If you absorb processing, your $10 fee becomes about $6.80 after Stripe takes around $3.20. If you pass processing to the seller, your margin is cleaner but their payout shrinks, which affects how attractive your platform is to supply. There is no universally right answer, but you must pick deliberately and make it visible to both sides, because surprise fees are the fastest way to lose sellers.
+
+## Where teams get burned
+
+- Building the happy path only, then discovering refunds, chargebacks, and declined payouts in production when real money is on the line.
+- Storing payment state in their own database and letting it drift out of sync with Stripe, so the dashboard and reality quietly disagree.
+- Underestimating onboarding friction and losing sellers before they ever transact.
+- Forgetting about negative balances — what happens when a refund hits a seller who has already withdrawn their money.
+- Ignoring tax reporting until year-end, when a marketplace in some regions must issue tax forms to sellers and reconcile a full year of transactions it never tracked cleanly.
+
+## Test everything in Stripe's test mode first
+
+Stripe provides a complete test environment with fake card numbers that simulate every outcome you need to handle: successful charges, declines, disputes, and failed payouts. Before a single real dollar moves, you should be able to run a buyer through booking and payment, watch the split land, trigger a refund, and confirm your database reconciles against the webhook events — all in test mode. Marketplaces that skip this step discover their edge cases in production, which is the worst possible place to find them.
+
+## A realistic timeline
+
+A functional Connect marketplace MVP — seller onboarding, a booking or order flow, split payments, payout handling, and a basic admin view — is typically a few weeks of focused work, not a weekend. The payment plumbing is the part to never rush; it is the part that costs real money, and real trust, when it breaks. Build the unhappy paths early, keep your database reconciled against Stripe from day one, and treat the admin view as a first-class feature rather than an afterthought.
+
+I have built a curated booking marketplace on Stripe Connect with automated payment splitting and the kind of onboarding and payout handling described above — you can see the shape of it in the [entertainment booking marketplace](/portfolio/entertainment-booking-marketplace) project. If you are planning something similar, [reach out](/contact) and I will walk you through the flows that matter for your specific model.
