@@ -16,8 +16,8 @@ topics:
     targetKeyword: "mvp development for startups"
     intent: how-to
     linkServices: [full-stack-web-development]
-    status: pending
-    publishedSlug: null
+    status: published
+    publishedSlug: mvp-vs-full-product-what-to-build-first
 
   - topic: "What does it cost to integrate Stripe payments"
     targetKeyword: "stripe payment integration cost"

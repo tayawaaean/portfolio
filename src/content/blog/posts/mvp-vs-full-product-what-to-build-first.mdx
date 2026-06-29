@@ -1,0 +1,100 @@
+---
+title: "MVP vs Full Product: What to Build First as a Startup"
+description: "For startups, the real mvp development challenge isn't knowing what to cut — it's recognizing when your MVP is done and when to invest in the full product."
+excerpt: "The hardest call in early product development isn't what to cut from v1 — it's knowing when you've learned enough to stop iterating and start building properly."
+date: "2026-06-29"
+readingMinutes: 6
+keywords:
+  - "mvp development for startups"
+  - "what to build first startup"
+  - "mvp to full product"
+  - "startup product development"
+---
+
+The question "should we build an MVP or the full product?" is framed wrong. It implies a single binary choice, but the real question is a sequence: what are we trying to learn right now, and what is the minimum system that lets us learn it? That reframe changes how you scope and sequence a build.
+
+## The two modes of early product work
+
+Most startup product development happens in two distinct modes that get conflated. The first is the learning mode: you're testing whether the thing should exist, whether users want it, and whether they'll pay for it. The second is the building mode: you know it should exist and you're investing in making it excellent, scalable, and maintainable. The tools for each mode are almost opposite — and applying building-mode thinking during the learning phase is one of the most reliable ways to waste months.
+
+An MVP is a tool for the learning mode. A full product investment belongs in the building mode. Features that make sense in a full product — polished onboarding flows, complete admin tooling, notification infrastructure, multi-role permissions — are expensive and slow down learning when you haven't yet confirmed the core loop works at all.
+
+## What MVP development for startups is actually optimising for
+
+The most common confusion about mvp development for startups is treating "minimum" as a budget constraint. It isn't — it's about what you're trying to find out. An MVP is the smallest version of a product that can test your riskiest assumption using real user behaviour, not surveys or demos.
+
+In practice, that means the MVP needs to support exactly the core workflow you're validating and nothing else. If your assumption is "event organisers will pay for a platform that handles performer bookings end to end," the MVP tests that loop: organiser lists an event, performer is matched or discovered, booking request is sent, payment is collected. It does not need a review system, a full messaging interface, a mobile app, or a comprehensive analytics dashboard. Those features only matter after you know the core loop works.
+
+The useful discipline is not "what can we cut?" but "what would we need to add back for a user to complete the core workflow?" Anything that is not structurally necessary to answer that question is a later feature.
+
+## The features that consistently wait
+
+There's a reliable pattern in what gets deferred from a well-scoped v1. The features that wait share one property: they improve the experience for existing users but don't enable the core workflow to complete at all.
+
+**Admin dashboards with reporting.** In the early phase, you are the admin. Direct database access or a simple read-only query interface costs nothing and tells you what the dashboard should eventually show — based on what you actually look up during the week.
+
+**Native mobile apps.** A responsive web app handles the majority of early-stage use cases without the build cost, separate codebase, and App Store review overhead.
+
+**Notification systems.** A single transactional email per key event is enough while you're figuring out which events actually matter. Full automation is a retention investment, not an MVP requirement.
+
+**Advanced search and filtering.** Basic filtering carries you through the first few hundred users and reveals which filters people actually use before you build the sophisticated version.
+
+**Multi-role permission systems.** Every additional role multiplies the surface area — separate views, separate flows, separate edge cases. Start with one role type if the core workflow allows it.
+
+None of these are permanent cuts. Every one becomes a real feature eventually. The question is whether you have validated what comes before it.
+
+## Reading the signals that the MVP has done its job
+
+The harder question isn't what to cut — it's knowing when to stop iterating on the MVP and start the full product investment. The most useful signals here are qualitative.
+
+Users who complain about what is missing while continuing to use what exists have told you something important: the core loop works and the product is worth improving. Users who express frustration with the core workflow itself have told you something different — that the fundamental premise may not be working.
+
+More specifically:
+
+**Retention in a rough product.** If users return to a product that is admittedly incomplete and ask what is coming next, the underlying value is real. If they try it and don't come back, no amount of polish will change that.
+
+**Willingness to pay for something unfinished.** Early users who pay knowing the product is rough have validated the value proposition in the most meaningful way possible.
+
+**Feature requests, not workflow complaints.** "I wish I could filter by date" is different from "I couldn't complete the checkout." The first signals that the core works. The second signals a v1 failure.
+
+When you are consistently hearing the first type and users are returning despite the roughness, the MVP has done its job.
+
+## What the full product investment actually looks like
+
+The shift from MVP to full product is not a switch you flip — it is a deliberate change in what you're optimising for. Learning-phase decisions optimise for iteration speed. Building-phase decisions optimise for scale, reliability, and the kind of experience that turns first-time users into long-term ones.
+
+That shift brings in a different class of work:
+
+**Onboarding at scale.** When the user base grows past the point where you can guide every signup personally, the product has to work without you. That requires clear flows, contextual help, and enough error handling that users don't get stuck silently.
+
+**Proper multi-role architecture.** Platforms with buyers, sellers, and administrators require careful data modelling. Getting permission logic wrong early creates technical debt that is hard to unwind without breaking existing users.
+
+**Complete payment flows.** A Stripe checkout in the happy path is an MVP. A production billing system handles subscription edge cases, refunds, disputes, failed payment retries, and the webhook handling that keeps your database consistent with what actually happened at the payment processor — not what your app assumes happened.
+
+The [DJP Athlete platform](/portfolio/djp-athlete-platform) is a clear example of this sequence done right. The original system — a legacy Laravel and iOS codebase — had already validated that users would pay for coaching content. The rebuild into a Next.js PWA with AI-powered exercise assignment, Stripe payments, a full admin dashboard, and CRM integration was a deliberate full-product investment, not a speculative one. That scope was earned by prior validation. The [full-stack web development](/services/full-stack-web-development) work I do most often lives in this building phase — where you know what you're building and the goal is to build it properly.
+
+## The two failure modes
+
+**MVP forever.** The product has proven itself — users are paying, retention is real, the core loop works — but development stays in learning mode. Technical debt compounds, onboarding stays rough, and feature velocity slows because every change requires working around earlier shortcuts. A better-engineered competitor eventually closes the gap.
+
+**Full product too early.** A team builds a polished multi-role platform with full notification infrastructure, a complete admin system, and a mobile app — then discovers the core use case does not resonate. Months of building-mode engineering sit on top of an unvalidated premise.
+
+Both feel identical in the moment: you are building features users would probably like. The discipline is asking, at each stage, which mode you are actually in.
+
+## Frequently asked questions
+
+**How do I know when the MVP is done?**
+
+When a stranger can complete the core workflow without your help, and the feedback tells you something real about whether the idea works. Not when it is polished or feature-complete — when it is usable enough to generate genuine signal.
+
+**Should I rebuild or iterate once the idea is validated?**
+
+It depends on how the MVP was built. A codebase with a clean data model can often be extended. One built quickly to test a concept accumulates shortcuts that get expensive to work around. The signal is feature velocity: if each new feature takes noticeably longer than the last, rebuilding on a proper foundation is usually faster than continuing to iterate on a fragile one.
+
+**Can I build the MVP and the full product simultaneously?**
+
+Rarely. The decisions that optimise for learning speed are directly opposed to the decisions that optimise for scale. Trying to do both typically produces something too costly to iterate on and not reliable enough to grow. Sequence them.
+
+## Getting the scope right
+
+The framing above changes what belongs on a roadmap. An honest answer to "what should we build first?" requires knowing what assumption is being tested, not just what features are on the list. I work through scope and data model decisions before writing code, which is the single thing that saves the most time in practice. [Get in touch](/contact) to talk through where your product is in this progression and what makes sense to build next.
