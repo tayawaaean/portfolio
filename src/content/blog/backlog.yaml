@@ -9,8 +9,8 @@ topics:
     targetKeyword: "cost to build an mvp"
     intent: cost
     linkServices: [full-stack-web-development]
-    status: pending
-    publishedSlug: null
+    status: published
+    publishedSlug: how-much-does-it-cost-to-build-an-mvp
 
   - topic: "MVP vs full product: what to build first as a startup"
     targetKeyword: "mvp development for startups"
