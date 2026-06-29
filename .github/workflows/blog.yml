@@ -52,6 +52,8 @@ jobs:
             topic's `status: published` + `publishedSlug` in backlog.yaml, commit ONLY the
             new post + backlog change with message "content: publish blog post — <title>",
             and run `git push origin main`. Never publish a post that fails the gate.
-          claude_args: "--model claude-sonnet-4-6 --max-turns 60"
+          # Disposable CI sandbox with a scoped GITHUB_TOKEN — let the agent run
+          # node/npx/git without interactive permission prompts.
+          claude_args: "--model claude-sonnet-4-6 --max-turns 80 --dangerously-skip-permissions"
         env:
           CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
