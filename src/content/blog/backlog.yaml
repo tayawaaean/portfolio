@@ -23,8 +23,8 @@ topics:
     targetKeyword: "stripe payment integration cost"
     intent: cost
     linkServices: [payment-integration]
-    status: pending
-    publishedSlug: null
+    status: published
+    publishedSlug: stripe-payment-integration-cost
 
   - topic: "How to add AI features to an existing web app"
     targetKeyword: "add ai to web app"
