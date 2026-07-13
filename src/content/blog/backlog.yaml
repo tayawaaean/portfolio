@@ -30,8 +30,8 @@ topics:
     targetKeyword: "add ai to web app"
     intent: how-to
     linkServices: [ai-integration]
-    status: pending
-    publishedSlug: null
+    status: published
+    publishedSlug: how-to-add-ai-features-to-an-existing-web-app
 
   - topic: "Next.js vs WordPress for a startup website"
     targetKeyword: "next.js vs wordpress"

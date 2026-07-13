@@ -1,0 +1,87 @@
+---
+title: "How to Add AI Features to an Existing Web App"
+description: "A practical guide to adding AI features to a live web app: which features earn it, how to integrate correctly, control costs, and keep outputs reliable."
+excerpt: "AI demos are easy. Adding AI to a working production app without breaking it, ballooning costs, or shipping unreliable outputs is a different problem."
+date: "2026-07-13"
+readingMinutes: 7
+keywords:
+  - "add ai to web app"
+  - "ai integration developer"
+  - "add ai features to existing app"
+  - "llm integration web app"
+  - "ai api integration"
+---
+
+Adding AI to a working web app sounds like a two-day task until you try it in production. Calling an LLM API is genuinely easy — the gap is between a working demo and a feature your users can rely on that does not surprise you with a bill at the end of the month. The decisions that matter are upstream of the API call: which features actually warrant AI, how to structure the integration, and how to keep outputs trustworthy without building a research lab inside your product.
+
+## Where AI actually earns its place
+
+The most useful question to ask before integrating any AI feature is: could you do this with deterministic code instead? If the answer is yes, you probably should. AI is worth the complexity when the problem has one of these characteristics:
+
+**The input is too varied for rules.** Parsing free-text descriptions, matching open-ended user queries to structured results, classifying support messages — tasks where the input space is enormous and rule writing becomes an infinite maintenance problem. This is where LLMs outperform branching logic by a wide margin.
+
+**The output requires language.** Generating a personalized summary, drafting a response from structured data, producing a readable brief from raw numbers — tasks where the goal is human-readable text in a context-appropriate form.
+
+**The judgment requires context the machine already has.** Recommending a workout based on a client's training history, scoring a resume against a role description, identifying cost-saving opportunities across a set of usage data — tasks where the right answer depends on reading a larger context that is already in your system.
+
+If none of these apply, adding AI likely introduces cost and unreliability without meaningful benefit. The AI features in the [DJP Athlete platform](/portfolio/djp-athlete-platform) are a clear example of where it fits: exercise assignment is not a simple lookup. It depends on the client's injury history, current performance data, and training goals — a context a rules engine cannot evaluate well. That is exactly where an LLM call justifies itself.
+
+## The integration pattern that works in production
+
+Once you have identified a feature where AI earns its place, the integration follows a reliable pattern. Skip any step and you will likely revisit it after something breaks in front of a user.
+
+**Define the output schema first.** Before writing a prompt, decide what a successful AI response looks like as a data structure. If you need a list of recommendations, each with a title and rationale, define that schema in code. Then prompt the model to return JSON that matches it. This shifts the integration from "the model said something" to "the model returned a validated object" — a much more stable contract.
+
+**Treat the prompt like application code.** A prompt is not a note to the model — it is the specification for the task, and it will be read thousands of times. Write it precisely, test it against the full range of inputs your users will produce, and version it. Vague prompts produce vague outputs; prompts that include the exact format and a worked example produce reliable ones.
+
+**Build the human review path where it matters.** For outputs that go out under your brand or drive real user decisions, a review step before delivery is worth the operational cost. The [AI email marketing automation](/portfolio/ai-email-marketing) project is a concrete example: generated content goes through a review dashboard before it reaches any subscriber. That single gate catches damaging outputs while still letting the system run autonomously at scale.
+
+**Add observability from the start.** Log the model call, the input, the output, and the latency. Not to read every log, but to have the data when something goes wrong — and something will. Knowing exactly which input produced which unexpected output cuts diagnosis time drastically.
+
+## Controlling cost before it surprises you
+
+Token-based pricing is the part of AI integration that most consistently catches teams off guard. A prompt that works perfectly in development can become a significant expense at production volume, particularly if inputs are large documents or multi-turn conversations that grow with each exchange.
+
+The practical levers are:
+
+**Choose the right model for each task.** Frontier models are more capable, but not every task needs maximum capability. A classification task that needs a yes/no answer with a short rationale runs well on a smaller, cheaper model. Reserve the larger models for tasks where the quality difference is real and visible to users.
+
+**Cache where you can.** If the same or similar prompt is being sent repeatedly — for example, summarizing the same knowledge base for every user — caching the response saves both latency and spend. The [market intelligence platform](/portfolio/market-picking-assistant) generates narrative briefs for ZIP codes: a brief for a given ZIP does not change on every request, so caching the outputs is a straightforward cost reduction.
+
+**Set input limits.** An unbounded input field that passes raw user text directly to an LLM is a cost risk. Truncating or preprocessing inputs keeps token counts predictable.
+
+## Making AI outputs reliable
+
+Non-determinism is the hardest property of LLMs to work with in production. The same prompt sent twice can return different outputs, and model updates from the provider can shift behavior without warning.
+
+The most effective mitigation is narrow prompts with structured output. The less latitude the model has to interpret the task, the more consistent the results. Asking a model to "help with this email" gives it enormous latitude. Asking it to "rewrite the subject line of this email to be under 50 characters and make the main benefit clear" is a much tighter task with a much more predictable output distribution.
+
+Validation on the output side catches the rest. If the model is supposed to return a list of five items and returns three, your application can detect that and either retry or fall back. If the model is supposed to return valid JSON and returns something else, a schema validator catches it before it touches your database.
+
+For text that goes directly to users, a simple confidence threshold or format check — "did the model return the structure I expected?" — is enough to catch the majority of failures without building a full output quality pipeline.
+
+## What this looks like in practice
+
+The pattern above is consistent across the AI integrations in real production apps. The [job referral platform](/portfolio/job-referral-platform) uses AI for resume review and mock interview feedback — both tasks where the input is a document with open-ended structure and the output needs to be useful natural language. The [AI transcription platform](/portfolio/ai-transcription-platform) uses AI for speaker diarization — a task where the signal-to-noise problem is too complex for rules. The [Efficyon](/portfolio/efficyon) platform uses AI to analyze SaaS tool usage patterns and surface cost-saving recommendations — a task where the model reads structured usage data and generates a prioritized recommendation list.
+
+In each case, the integration is a small surface area — a typed API call, a validated output schema, and the downstream handling — layered on top of a conventional web app that handles persistence, auth, and business logic in ordinary code. AI does not replace the architecture; it adds a capability at the points where deterministic code cannot do the job.
+
+## Frequently asked questions
+
+**How long does it take to add an AI feature to an existing app?**
+
+A well-scoped AI feature — defined input, structured output, clear success condition — can be integrated in a few days. Time expands when scope is fuzzy, prompt engineering takes more iteration than expected, or the feature also needs a human review workflow or cost monitoring layer.
+
+**Which AI provider should I use — OpenAI or Anthropic?**
+
+Both are viable and the gap is narrow for most production tasks. Test a representative sample of your actual inputs against each and compare quality, latency, and cost for your specific task. Design the integration behind an abstraction layer so swapping providers is a configuration change, not a rewrite.
+
+**How do I prevent the AI from saying something wrong to my users?**
+
+Narrow the task, validate the output format, and add a human review step for anything high-stakes. The more precisely the prompt defines the task and the output format, the less room there is for the model to produce something unexpected. For most production use cases, structured output with schema validation handles the majority of failure modes without requiring manual review of every response.
+
+## Adding it to your app
+
+If you have a working web app and a specific place where AI would genuinely improve the product, the integration is a concrete, scoped piece of work — not an open-ended research project. My [AI integration service](/services/ai-integration) covers the full scope: prompt design, structured output, cost monitoring, and the human review layer where it matters.
+
+If you are not sure whether the feature is the right fit for AI, [get in touch](/contact) and I am happy to talk through the use case honestly.
