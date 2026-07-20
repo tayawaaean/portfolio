@@ -37,8 +37,8 @@ topics:
     targetKeyword: "next.js vs wordpress"
     intent: comparison
     linkServices: [full-stack-web-development]
-    status: pending
-    publishedSlug: null
+    status: published
+    publishedSlug: nextjs-vs-wordpress-for-a-startup-website
 
   - topic: "Why turn your web app into a PWA"
     targetKeyword: "progressive web app benefits"
