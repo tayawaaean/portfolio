@@ -44,8 +44,8 @@ topics:
     targetKeyword: "progressive web app benefits"
     intent: how-to
     linkServices: [progressive-web-apps]
-    status: pending
-    publishedSlug: null
+    status: published
+    publishedSlug: why-turn-your-web-app-into-a-pwa
 
   - topic: "Hiring an offshore developer in the Philippines: a founder's guide"
     targetKeyword: "hire developer philippines"
