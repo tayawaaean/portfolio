@@ -51,8 +51,8 @@ topics:
     targetKeyword: "hire developer philippines"
     intent: hire
     linkServices: [full-stack-web-development]
-    status: pending
-    publishedSlug: null
+    status: published
+    publishedSlug: hire-a-developer-in-the-philippines
 
   - topic: "Building a two-sided booking platform: features and timeline"
     targetKeyword: "booking platform development"
