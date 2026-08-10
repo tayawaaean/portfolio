@@ -58,5 +58,5 @@ topics:
     targetKeyword: "booking platform development"
     intent: how-to
     linkServices: [saas-marketplace-development]
-    status: pending
-    publishedSlug: null
+    status: published
+    publishedSlug: booking-platform-development
